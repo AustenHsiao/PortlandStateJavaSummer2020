@@ -47,6 +47,7 @@ public class Project1 {
         return false;
       }
     }
+    // Check lengths, for the first two sections, we can have either a single digit or two digits
     if(splitDate[0].length() > 2){return false;}
     if(splitDate[1].length() > 2){return false;}
     if(splitDate[2].length() != 4){return false;}
@@ -57,7 +58,8 @@ public class Project1 {
 
     if(month < 1 || month > 12){return false;}
     if(day < 1 || day > 31){return false;}
-    // Arbitrarily assign 2000 to be the earliest acceptable year, in the case of backdating or old logs
+    // Arbitrarily assign 2000 to be the earliest acceptable year. This means that the year 99999 is acceptable, but maybe
+    // my program will catch on one day in the future
     if(year < 2000){return false;}
 
     // All the months that CANNOT have 31 days.
@@ -67,12 +69,17 @@ public class Project1 {
        month == 9 ||
        month == 11) && day == 31){return false;}
 
+    // If it passed through all the filters, it might be true
     return true;
   }
 
   /**
    * Takes in a string and verifies that the form fits the 24-hour clock format.
-   * Returns boolean value.
+   * Returns boolean value. A valid time can exist between 4 and 5 characters (1:01 vs 01:01).
+   * Much like the phone number parser, this function splits the time by a colon. To ensure that
+   * there even was a colon to begin with, the length of the newly split string should be 2.
+   * Each sections should contain only numbers and have a maximum of 2 digits. Within each section
+   * the numbers should also makes sense-- eg: the hours in a day are bounded by [0,24] and minutes [0,60)
    * @param time
    * @return
    */
@@ -94,9 +101,14 @@ public class Project1 {
     return true;
   }
 
+  /**
+   * Hardcoded readme for this program
+   */
   public static void printREADME(){
-    System.out.println("\n\nThis program creates a new phone bill for the given user. " +
-            "\nThe phone call information is added to the user's bill\n");
+    System.out.println("\n\nWritten by Austen Hsiao for CS510, assignment 1.\n" +
+            "This program creates a new phone bill for the given user. " +
+            "\nThe phone call information is added to the user's bill\n" +
+            "If the user specifies -print, the phonecall will be printed.\n");
     System.out.print("usage: java edu.pdx.cs410J.ahsiao.Project1 [options] <args>\n  args are (in this order):\n" +
             "    customer\t\t\tPerson whose phone bill we're modeling\n" +
             "    callerNumber\t\tPhone number of caller\n" +
@@ -109,76 +121,99 @@ public class Project1 {
             "  Date and time should be in the format: mm/dd/yyyy hh:mm");
   }
 
-  public static void main(String[] args) {
-    int print = 0;
-    int numberOfOptions = 0;
-
-    // If there are no arguments, this is clearly too few arguments passed.
-    // At a minimum, we can have one argument. For it to invoke any normal response from our program,
-    // it should be a fetch for the README.
-    if(args.length == 0){
-      System.err.println("Missing command line arguments");
-      System.exit(1);
+  /**
+   *  parseOptions takes in the number of arguments in the command line array, as well as
+   *  the command line array itself. By writing the options parsing as a separate function than
+   *  main, I could develop tests for it.
+   * @param argCount
+   * @param args
+   * @return
+   */
+  public static int parseOptions(int argCount, String[] args){
+    // No arguments will return -1 for error
+    if(argCount == 0){
+      return -1;
     }
-
-    if(args.length == 1 && "-README".equals(args[0])){
-      Project1.printREADME();
-      System.exit(0);
+    // If 1 argument, if it's "-README", then we return 1.
+    // If we only have 1 argument that isn't "-README", we return -1 because it makes no sense--
+    // we're missing arguments.
+    if(argCount == 1 && "-README".equals(args[0])){
+      return 1;
     }
-    else if(args.length == 1 && !("-README".equals(args[0]))){
-      System.err.println("Missing command line arguments");
-      System.exit(1);
+    else if(argCount == 1 && !("-README".equals(args[0]))){
+      return -1;
     }
-
-    // If we have 2 or more arguments, we need to check both options.
-    // Since calling the README exits the program, we handle running "-print -README"
-    // (with no additional arguments) by printing out the README and terminating.
-    if("-print".equals(args[0]) || "-print".equals(args[1])){
-      print = 1;
-      ++numberOfOptions;
-    }
+    // If more than 1 argument, we need to check index 0 or 1 if it's "-README". In such a case,
+    // we return 1 to tell main to print out the readme
     if("-README".equals(args[0]) || "-README".equals(args[1])){
-      Project1.printREADME();
-      System.exit(0);
+      return 1;
+    }
+    // If we get down here, that means that we have at least two command line arguments,
+    // and neither of the first two are "-README". So we return 0.
+    return 0;
+  }
+
+  public static void main(String[] args) {
+    int printYes = 0;
+    int argCount = args.length;
+
+    switch(parseOptions(argCount, args)){
+      case -1:
+        System.err.println("Missing command line arguments");
+        System.exit(1);
+      case 1:
+        Project1.printREADME();
+        System.exit(0);
+      case 0:
     }
 
-    if(args.length < 7){
+    /* After calling parseOptions, if the exit cases aren't triggered, this means that we have at least 2 arguments that are
+    not -README. So if either of the first two arguments are -print, we set printYes to 1. This is a flag that tells us to
+    print out the phone call at the end of this method. It also serves as a shift-- I accessed the command line arguments
+    by index, so if the -print flag is set, we need to increment all the accessing indices by 1.*/
+    if("-print".equals(args[0]) || "-print".equals(args[1])){
+      printYes = 1;
+    }
+
+    // minimum number of arguments is 7.
+    // (name, number1, number2, time1, date1, time2, date2) require for PhoneCall
+    if(argCount < 7){
       System.err.println("Missing command line arguments");
       System.exit(1);
-    } else if(args.length > 8){
+    } else if(argCount > 8){ // maximum: -print (name, number1, number2, time1, date1, time2, date2) is 8 things
       System.err.println("Too many command line arguments");
       System.exit(1);
     }
 
     // Check phone numbers
-    if(validPhoneNumber(args[1+numberOfOptions]) == false || validPhoneNumber(args[2+numberOfOptions]) == false){
+    if(validPhoneNumber(args[1+printYes]) == false || validPhoneNumber(args[2+printYes]) == false){
       System.err.println("Invalid phone number. Phone number must be in the form xxx-xxx-xxxx where x is a digit between 0-9");
       System.exit(1);
     }
 
     // Check dates
-    if(validDate(args[3+numberOfOptions]) == false || validDate(args[5+numberOfOptions]) == false){
+    if(validDate(args[3+printYes]) == false || validDate(args[5+printYes]) == false){
       System.out.println("Invalid date. Date must be in the form mm/dd/yyyy");
       System.exit(1);
     }
 
     // Check times
-    if(validTime(args[4+numberOfOptions]) == false || validTime(args[6+numberOfOptions]) == false){
+    if(validTime(args[4+printYes]) == false || validTime(args[6+printYes]) == false){
       System.out.println("Invalid time. Time must be in the 24-hour format");
       System.exit(1);
     }
 
     // Create a new PhoneBill for the specified person and add in the new PhoneCall
-    PhoneBill bill = new PhoneBill(args[0+numberOfOptions], new PhoneCall(args[0+numberOfOptions],
-            args[1+numberOfOptions],
-            args[2+numberOfOptions],
-            args[3+numberOfOptions],
-            args[4+numberOfOptions],
-            args[5+numberOfOptions],
-            args[6+numberOfOptions]));
+    PhoneBill bill = new PhoneBill(args[0+printYes], new PhoneCall(args[0+printYes],
+            args[1+printYes],
+            args[2+printYes],
+            args[3+printYes],
+            args[4+printYes],
+            args[5+printYes],
+            args[6+printYes]));
 
     // There's only going to be one PhoneCall in project1, but this loop would iterate over all PhoneCalls the user has in their log
-    if(print == 1){
+    if(printYes == 1){
       for (Object phoneRecords : bill.getPhoneCalls()) {
         System.out.println(phoneRecords);
       }

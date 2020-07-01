@@ -33,16 +33,18 @@ public class PhoneBill extends AbstractPhoneBill {
         return this.billOwner;
     }
 
+    @Override
+    public void addPhoneCall(AbstractPhoneCall call) {
+        PhoneCall castedCall = (PhoneCall) call;
+        billLog.add(castedCall);
+    }
+/*
     // adds a phone call to the user's bill log
     public void addPhoneCall(PhoneCall call) {
         billLog.add(call);
-    }
+    }*/
 
-    // I don't know what this should do since the abstractPhoneCall doesn't have any good info.
-    // It's needed to form the concrete class.
-    @Override
-    public void addPhoneCall(AbstractPhoneCall abstractPhoneCall) {
-    }
+
 
     @Override
     public Collection getPhoneCalls() {
