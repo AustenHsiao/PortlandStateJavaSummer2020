@@ -94,39 +94,94 @@ public class Project1 {
     return true;
   }
 
+  public static void printREADME(){
+    System.out.println("\n\nThis program creates a new phone bill for the given user. " +
+            "\nThe phone call information is added to the user's bill\n");
+    System.out.print("usage: java edu.pdx.cs410J.ahsiao.Project1 [options] <args>\n  args are (in this order):\n" +
+            "    customer\t\t\tPerson whose phone bill we're modeling\n" +
+            "    callerNumber\t\tPhone number of caller\n" +
+            "    calleeNumber\t\tPhone number of person who was called\n" +
+            "    start\t\t\tDate and time call began (24-hour time)\n" +
+            "    end\t\t\t\tDate and time call ended (24-hour time)\n" +
+            "  opertions are (options may appear in any order):\n" +
+            "    -print\t\t\tPrints a description of the new phone call\n" +
+            "    -README\t\t\tPrints a README for this project and exists\n" +
+            "  Date and time should be in the format: mm/dd/yyyy hh:mm");
+  }
+
   public static void main(String[] args) {
+    int print = 0;
+    int numberOfOptions = 0;
+
+    // If there are no arguments, this is clearly too few arguments passed.
+    // At a minimum, we can have one argument. For it to invoke any normal response from our program,
+    // it should be a fetch for the README.
+    if(args.length == 0){
+      System.err.println("Missing command line arguments");
+      System.exit(1);
+    }
+
+    if(args.length == 1 && "-README".equals(args[0])){
+      Project1.printREADME();
+      System.exit(0);
+    }
+    else if(args.length == 1 && !("-README".equals(args[0]))){
+      System.err.println("Missing command line arguments");
+      System.exit(1);
+    }
+
+    // If we have 2 or more arguments, we need to check both options.
+    // Since calling the README exits the program, we handle running "-print -README"
+    // (with no additional arguments) by printing out the README and terminating.
+    if("-print".equals(args[0]) || "-print".equals(args[1])){
+      print = 1;
+      ++numberOfOptions;
+    }
+    if("-README".equals(args[0]) || "-README".equals(args[1])){
+      Project1.printREADME();
+      System.exit(0);
+    }
+
     if(args.length < 7){
       System.err.println("Missing command line arguments");
       System.exit(1);
-    } else if(args.length > 7){
+    } else if(args.length > 8){
       System.err.println("Too many command line arguments");
       System.exit(1);
     }
 
     // Check phone numbers
-    if(validPhoneNumber(args[1]) == false || validPhoneNumber(args[2]) == false){
+    if(validPhoneNumber(args[1+numberOfOptions]) == false || validPhoneNumber(args[2+numberOfOptions]) == false){
       System.err.println("Invalid phone number. Phone number must be in the form xxx-xxx-xxxx where x is a digit between 0-9");
       System.exit(1);
     }
 
     // Check dates
-    if(validDate(args[3]) == false || validDate(args[5]) == false){
+    if(validDate(args[3+numberOfOptions]) == false || validDate(args[5+numberOfOptions]) == false){
       System.out.println("Invalid date. Date must be in the form mm/dd/yyyy");
       System.exit(1);
     }
 
     // Check times
-    if(validTime(args[4]) == false || validTime(args[6]) == false){
+    if(validTime(args[4+numberOfOptions]) == false || validTime(args[6+numberOfOptions]) == false){
       System.out.println("Invalid time. Time must be in the 24-hour format");
       System.exit(1);
     }
 
     // Create a new PhoneBill for the specified person and add in the new PhoneCall
-    PhoneBill bill = new PhoneBill(args[0], new PhoneCall(args[0], args[1], args[2], args[3], args[4], args[5], args[6]));
+    PhoneBill bill = new PhoneBill(args[0+numberOfOptions], new PhoneCall(args[0+numberOfOptions],
+            args[1+numberOfOptions],
+            args[2+numberOfOptions],
+            args[3+numberOfOptions],
+            args[4+numberOfOptions],
+            args[5+numberOfOptions],
+            args[6+numberOfOptions]));
 
     // There's only going to be one PhoneCall in project1, but this loop would iterate over all PhoneCalls the user has in their log
-    for(Object phoneRecords: bill.getPhoneCalls()){
-      System.out.println(phoneRecords);
+    if(print == 1){
+      for (Object phoneRecords : bill.getPhoneCalls()) {
+        System.out.println(phoneRecords);
+      }
     }
     System.exit(0);
   }
