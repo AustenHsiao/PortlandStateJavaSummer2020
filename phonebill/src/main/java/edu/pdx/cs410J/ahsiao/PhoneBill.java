@@ -35,16 +35,12 @@ public class PhoneBill extends AbstractPhoneBill {
 
     @Override
     public void addPhoneCall(AbstractPhoneCall call) {
+        // Maybe this is bad practice, but in the context of this assignment, since an AbstractPhoneCall object
+        // cannot be made (it's abstract), I think it's safe to assume that any AbstractPhoneCall we pass into this function
+        // can be downcasted without error.
         PhoneCall castedCall = (PhoneCall) call;
         billLog.add(castedCall);
     }
-/*
-    // adds a phone call to the user's bill log
-    public void addPhoneCall(PhoneCall call) {
-        billLog.add(call);
-    }*/
-
-
 
     @Override
     public Collection getPhoneCalls() {
