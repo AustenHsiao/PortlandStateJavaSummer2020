@@ -105,19 +105,19 @@ public class Project1 {
    * Hardcoded readme for this program
    */
   public static void printREADME(){
-    System.out.println("\n\nWritten by Austen Hsiao for CS510, assignment 1.\n" +
-            "This program creates a new phone bill for the given user. " +
-            "\nThe phone call information is added to the user's bill\n" +
-            "If the user specifies -print, the phonecall will be printed.\n");
-    System.out.print("usage: java edu.pdx.cs410J.ahsiao.Project1 [options] <args>\n  args are (in this order):\n" +
-            "    customer\t\t\tPerson whose phone bill we're modeling\n" +
-            "    callerNumber\t\tPhone number of caller\n" +
-            "    calleeNumber\t\tPhone number of person who was called\n" +
-            "    start\t\t\tDate and time call began (24-hour time)\n" +
-            "    end\t\t\t\tDate and time call ended (24-hour time)\n" +
-            "  opertions are (options may appear in any order):\n" +
-            "    -print\t\t\tPrints a description of the new phone call\n" +
-            "    -README\t\t\tPrints a README for this project and exists\n" +
+    System.out.println("\n\n Written by Austen Hsiao for CS510, assignment 1.\n" +
+            " This program creates a new phone bill for the given user. " +
+            "\n The phone call information is added to the user's bill.\n" +
+            " If the user specifies -print, the phonecall will be printed.\n");
+    System.out.print(" usage: java edu.pdx.cs410J.ahsiao.Project1 [options] <args>\n  args are (in this order):\n" +
+            "    \tcustomer\t\tPerson whose phone bill we're modeling\n" +
+            "    \tcallerNumber\t\tPhone number of caller\n" +
+            "    \tcalleeNumber\t\tPhone number of person who was called\n" +
+            "    \tstart\t\t\tDate and time call began (24-hour time)\n" +
+            "    \tend\t\t\tDate and time call ended (24-hour time)\n" +
+            "  options are (options may appear in any order):\n" +
+            "    \t-print\t\t\tPrints a description of the new phone call\n" +
+            "    \t-README\t\t\tPrints a README for this project and exists\n" +
             "  Date and time should be in the format: mm/dd/yyyy hh:mm");
   }
 
@@ -153,6 +153,10 @@ public class Project1 {
     return 0;
   }
 
+  /*
+  After parsing the command line arguments, I have no check to ensure the end time and date is truly
+  after the start time and date. Eg. the start date could be in the year 2050 while the end year is 2020.
+  */
   public static void main(String[] args) {
     int printYes = 0;
     int argCount = args.length;
