@@ -64,6 +64,7 @@ public class Student extends Human {
    * standard out by invoking its <code>toString</code> method.
    */
   public static void main(String[] args) {
+    /*
     // Check minimum number of arguments
     int argumentNumber = args.length;
     if(argumentNumber < 3){
@@ -79,7 +80,7 @@ public class Student extends Human {
 
     // Make the person and print them out
     Student person = new Student(args[0], classList, Double.parseDouble(args[2]), args[1]);
-    System.out.println(person);
+    System.out.println(person);*/
     System.exit(0);
   }
 }

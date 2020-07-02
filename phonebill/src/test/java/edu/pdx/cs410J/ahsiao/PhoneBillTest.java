@@ -1,8 +1,6 @@
 package edu.pdx.cs410J.ahsiao;
 import org.junit.Test;
 
-import java.util.Collection;
-
 import static org.junit.Assert.assertEquals;
 
 public class PhoneBillTest {
