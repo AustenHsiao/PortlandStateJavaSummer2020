@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.testng.Assert.assertEquals;
 
 /**
  * Unit tests for the Student class.  In addition to the JUnit annotations,
