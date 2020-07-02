@@ -37,6 +37,17 @@ public class StudentTest
     assertThat(pat.toString(), containsString("has a GPA of 3.76"));
   }
 
+  @Test
+  public void test1(){
+    ArrayList<String> classes = new ArrayList<String>();
+    classes.add("one");
+    classes.add("two");
+    classes.add("three");
+
+    Student pat = new Student("Pat", classes, 3.76, "Doesn't matter");
+    assertThat(pat.toString(), containsString("has a GPA of 3.76")); // this isnt a real test
+  }
+
   private Student createStudentNamed(String name) {
     return new Student(name, new ArrayList<>(), 0.0, "Doesn't matter");
   }

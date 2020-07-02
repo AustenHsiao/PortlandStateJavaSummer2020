@@ -18,7 +18,7 @@ public class Project1 {
     String[] splitNumber = phonenum.split("-");
     if(splitNumber.length != 3){return false;}
     for(String numberSections: splitNumber){
-      if(!numberSections.matches("[0-9]+")){
+      if(!numberSections.matches("[0-9]+") || numberSections.length() < 3 || numberSections.length() > 4){
         return false;
       }
     }

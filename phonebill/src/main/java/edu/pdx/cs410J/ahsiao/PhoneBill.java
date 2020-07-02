@@ -5,7 +5,7 @@ import edu.pdx.cs410J.AbstractPhoneCall;
 import java.util.Collection;
 import java.util.ArrayList;
 
-public class PhoneBill extends AbstractPhoneBill {
+public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
     private String billOwner;
     private Collection<PhoneCall> billLog = new ArrayList<PhoneCall>();
 
@@ -34,12 +34,8 @@ public class PhoneBill extends AbstractPhoneBill {
     }
 
     @Override
-    public void addPhoneCall(AbstractPhoneCall call) {
-        // Maybe this is bad practice, but in the context of this assignment, since an AbstractPhoneCall object
-        // cannot be made (it's abstract), I think it's safe to assume that any AbstractPhoneCall we pass into this function
-        // can be downcasted without error.
-        PhoneCall castedCall = (PhoneCall) call;
-        billLog.add(castedCall);
+    public void addPhoneCall(PhoneCall phoneCall) {
+        billLog.add(phoneCall);
     }
 
     @Override
