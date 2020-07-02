@@ -58,8 +58,7 @@ public class Project1 {
 
     if(month < 1 || month > 12){return false;}
     if(day < 1 || day > 31){return false;}
-    // Arbitrarily assign 2000 to be the earliest acceptable year. This means that the year 99999 is acceptable, but maybe
-    // my program will catch on one day in the future
+    // Arbitrarily assign 2000 to be the earliest acceptable year. The upper limit is constrained to 4 digits
     if(year < 2000){return false;}
 
     // All the months that CANNOT have 31 days.
@@ -104,7 +103,7 @@ public class Project1 {
   /**
    * Hardcoded readme for this program
    */
-  public static void printREADME(){
+  public static int printREADME(){
     System.out.println("\n\n Written by Austen Hsiao for CS510, assignment 1.\n" +
             " This program creates a new phone bill for the given user. " +
             "\n The phone call information is added to the user's bill.\n" +
@@ -119,6 +118,7 @@ public class Project1 {
             "    \t-print\t\t\tPrints a description of the new phone call\n" +
             "    \t-README\t\t\tPrints a README for this project and exists\n" +
             "  Date and time should be in the format: mm/dd/yyyy hh:mm");
+    return 1;
   }
 
   /**

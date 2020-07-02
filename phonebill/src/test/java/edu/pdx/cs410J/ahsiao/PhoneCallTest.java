@@ -20,20 +20,32 @@ public class PhoneCallTest {
             "222-222-2222",
             "1/11/2025",
             "19:00",
-            "2/22/2020",
+            "02/22/2020",
             "19:10");
   }
 
   @Test
-  public void getStartTimeStringNeedsToBeImplemented() {
+  public void gettingCallerNo(){
+    PhoneCall test = dummyPhoneCall();
+    assertEquals(test.getCaller(), "111-111-1111");
+  }
+
+  @Test
+  public void gettingCalleeNo(){
+    PhoneCall test = dummyPhoneCall();
+    assertEquals(test.getCallee(), "222-222-2222");
+  }
+
+  @Test
+  public void getStartTimeString() {
     PhoneCall call = dummyPhoneCall();
     assertEquals(call.getStartTimeString(), "19:00 1/11/2025");
   }
 
   @Test
-  public void initiallyAllPhoneCallsHaveTheSameCallee() {
+  public void getEndTimeString() {
     PhoneCall call = dummyPhoneCall();
-    assertThat(call.getCallee(), is("222-222-2222"));
+    assertEquals(call.getEndTimeString(), "19:10 02/22/2020");
   }
 
   @Test

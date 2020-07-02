@@ -43,57 +43,63 @@ public class Project1Test {
   }
 
   @Test
-  public void invalidDateTest1(){
+  public void dateTooShort(){
     // a single number
     assertEquals(Project1.validDate("5"), false);
   }
 
   @Test
-  public void invalidDateTest2(){
-    // too many digits in the first section, 2 digits in the second, and 4 for the year
+  public void dateTooLong(){
+    // a bunch of numbers
+    assertEquals(Project1.validDate("555555555555555"), false);
+  }
+
+  @Test
+  public void moreThanThreeSections(){
+    // too many (or too few) / chars will end up with !=3 sections
+    assertEquals(Project1.validDate("0/01/01/2020"), false);
+  }
+
+  @Test
+  public void onlyContainNumbers(){
+    // each section should only contain numbers
+    assertEquals(Project1.validDate("01/a1/2020"), false);
+  }
+
+  @Test
+  public void tooManyDigitsInTheFirstSection(){
+    // too many digits in the first section
     assertEquals(Project1.validDate("001/01/2020"), false);
   }
 
   @Test
-  public void invalidDateTest3(){
-    // too many digits in the first section, 1 digit in the second, and 4 for the year
-    assertEquals(Project1.validDate("001/1/2020"), false);
+  public void tooManyDigitsInTheSecondSection(){
+    // name
+    assertEquals(Project1.validDate("01/001/2020"), false);
   }
 
   @Test
-  public void invalidDateTest4(){
-    // 1 digit in the first section, too many digits in the second, 4 digits for the year
-    assertEquals(Project1.validDate("1/001/2020"), false);
+  public void yearNeedsToBeFourDigits(){
+    // the year must be 4 digits-- no more, no less
+    assertEquals(Project1.validDate("12/31/20200"), false);
   }
 
   @Test
-  public void invalidDateTest5(){
-    // there is no 13th month that I know of
-    assertEquals(Project1.validDate("13/01/2020"), false);
+  public void invalidMonth(){
+    // months must be within [1,12]
+    assertEquals(Project1.validDate("13/25/2020"), false);
   }
 
   @Test
-  public void invalidDateTest6(){
-    // no month has 32 days
-    assertEquals(Project1.validDate("12/32/2020"), false);
+  public void invalidDay(){
+    // days must be between 1 and 31
+    assertEquals(Project1.validDate("12/40/2020"), false);
   }
 
   @Test
-  public void invalidDateTest7(){
-    // Arbitrarily declare the year 2000 to be the earliest year we can use
-    assertEquals(Project1.validDate("12/25/1999"), false);
-  }
-
-  @Test
-  public void invalidDateTest8(){
-    // invalid year
-    assertEquals(Project1.validDate("12/25/a"), false);
-  }
-
-  @Test
-  public void invalidDateTest9(){
-    // invalid year
-    assertEquals(Project1.validDate("12/25/a123"), false);
+  public void onAMonthThatCannotHaveThirtyOneDays(){
+    // Certain months never have 31 days
+    assertEquals(Project1.validDate("11/31/2020"), false);
   }
 
   @Test
@@ -110,47 +116,69 @@ public class Project1Test {
 
   @Test
   public void validDateTest3(){
-    // valid date-- no upper limit on the year
+    // valid date-- no upper limit on the year (as long as it has 4 digits)
     assertEquals(Project1.validDate("1/1/2025"), true);
   }
 
   @Test
-  public void invalidTimeTest1(){
-    assertEquals(Project1.validTime("00:60"), false);
+  public void timeTooShort(){
+    // the string is too short
+    assertEquals(Project1.validTime("5"), false);
   }
 
   @Test
-  public void invalidTimeTest2(){
-    assertEquals(Project1.validTime("25:00"), false);
+  public void timeTooLong(){
+    // the string is too short
+    assertEquals(Project1.validTime("5555555555"), false);
   }
 
   @Test
-  public void invalidTimeTest3(){
+  public void tooManySections(){
+    assertEquals(Project1.validTime("0:0:60"), false);
+  }
+
+  @Test
+  public void sectionNotAllNumber(){
+    assertEquals(Project1.validTime("a5:00"), false);
+  }
+
+  @Test
+  public void sectionTooLong(){
     assertEquals(Project1.validTime("000:60"), false);
   }
 
   @Test
-  public void invalidTimeTest4(){
-    assertEquals(Project1.validTime("a0:60"), false);
+  public void notEnoughHoursInTheDay(){
+    assertEquals(Project1.validTime("25:01"), false);
+  }
+
+  @Test
+  public void tooManyMinutes(){
+    assertEquals(Project1.validTime("00:65"), false);
   }
 
   @Test
   public void validTimeTest1(){
-    assertEquals(Project1.validTime("00:59"), true);
-  }
-
-  @Test
-  public void validTimeTest2(){
     assertEquals(Project1.validTime("24:59"), true);
   }
 
   @Test
-  public void validTimeTest3(){
+  public void validTimeTest2(){
     assertEquals(Project1.validTime("00:00"), true);
   }
 
   @Test
-  public void readMeOptions1(){
+  public void validTimeTest3(){
+    assertEquals(Project1.validTime("0:00"), true);
+  }
+
+  @Test
+  public void printOutReadme(){
+    assertThat(Project1.printREADME(), is(1));
+  }
+
+  @Test
+  public void noArguments(){
     // no arguments
     String[] args = {};
     int argCount = args.length;
@@ -158,7 +186,7 @@ public class Project1Test {
   }
 
   @Test
-  public void readMeOptions2(){
+  public void oneArgumentNoReadme(){
     // one argument that isn't "-README"
     String[] args = {"Hi"};
     int argCount = args.length;
@@ -166,7 +194,7 @@ public class Project1Test {
   }
 
   @Test
-  public void readMeOptions3(){
+  public void oneArgumentYesReadme(){
     // one argument that IS "-README"
     String[] args = {"-README"};
     int argCount = args.length;
@@ -174,7 +202,7 @@ public class Project1Test {
   }
 
   @Test
-  public void readMeOptions4(){
+  public void twoArgumentNoReadme(){
     // two arguments that both are not "-README"
     // these strings don't make sense in the context of this project, but the error handling is taken care
     // of somewhere else
@@ -184,7 +212,7 @@ public class Project1Test {
   }
 
   @Test
-  public void readMeOptions5(){
+  public void twoArgumentYesReadme0(){
     // two arguments where index 0 is "-README"
     String[] args = {"-README", "everybody"};
     int argCount = args.length;
@@ -192,7 +220,7 @@ public class Project1Test {
   }
 
   @Test
-  public void readMeOptions6(){
+  public void twoArgumentYesReadme1(){
     // two arguments where index 1 is "-README"
     String[] args = {"hi", "-README"};
     int argCount = args.length;
