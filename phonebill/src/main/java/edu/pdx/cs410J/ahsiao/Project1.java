@@ -154,6 +154,7 @@ public class Project1 {
     if("-README".equals(args[0]) || "-README".equals(args[1])){
       return 1;
     }
+
     // If we get down here, that means that we have at least two command line arguments,
     // and neither of the first two are "-README". So we return 0.
     return 0;
@@ -164,8 +165,8 @@ public class Project1 {
   after the start time and date. Eg. the start date could be in the year 2050 while the end year is 2020.
   */
   public static void main(String[] args) {
-    int printYes = 0;
     int argCount = args.length;
+    int printYes = 0;
 
     switch(parseOptions(argCount, args)){
       case -1:
@@ -173,25 +174,32 @@ public class Project1 {
         System.exit(1);
       case 1:
         Project1.printREADME();
-        System.exit(0);
+        System.exit(2);
       case 0:
     }
 
     /* After calling parseOptions, if the exit cases aren't triggered, this means that we have at least 2 arguments that are
     not -README. So if either of the first two arguments are -print, we set printYes to 1. This is a flag that tells us to
     print out the phone call at the end of this method. It also serves as a shift-- I accessed the command line arguments
-    by index, so if the -print flag is set, we need to increment all the accessing indices by 1.*/
-    if("-print".equals(args[0]) || "-print".equals(args[1])){
+    by index, so if the -print flag is set, we need to increment all the accessing indices by 1. Note that the default value
+    for printYes is 0*/
+    if("-print".equals(args[0])){
       printYes = 1;
+    }
+    else if("-print".equals(args[1])){
+      // If we've made it here and the -print flag is the second argument in the list, this means that args[0] is NOT -README.
+      // -print as the second argument means that the order of the command line arguments is wrong. This should produce an error
+      System.err.println("Command line arguments out of order. See -README");
+      System.exit(1);
     }
 
     // minimum number of arguments is 7.
     // (name, number1, number2, time1, date1, time2, date2) require for PhoneCall
     if(argCount < 7){
-      System.err.println("Missing command line arguments");
+      System.err.println("Missing command line arguments. See -README");
       System.exit(1);
     } else if(argCount > 8){ // maximum: -print (name, number1, number2, time1, date1, time2, date2) is 8 things
-      System.err.println("Too many command line arguments");
+      System.err.println("Too many command line arguments. See -README");
       System.exit(1);
     }
 
@@ -203,13 +211,13 @@ public class Project1 {
 
     // Check dates
     if(validDate(args[3+printYes]) == false || validDate(args[5+printYes]) == false){
-      System.out.println("Invalid date. Date must be in the form mm/dd/yyyy");
+      System.err.println("Invalid date. Date must be in the form mm/dd/yyyy");
       System.exit(1);
     }
 
     // Check times
     if(validTime(args[4+printYes]) == false || validTime(args[6+printYes]) == false){
-      System.out.println("Invalid time. Time must be in the 24-hour format");
+      System.err.println("Invalid time. Time must be in the 24-hour format (xx:xx)");
       System.exit(1);
     }
 
