@@ -130,7 +130,7 @@ public class Project1 {
   /**
    *  parseOptions takes in the number of arguments in the command line array, as well as
    *  the command line array itself. By writing the options parsing as a separate function than
-   *  main, I could develop tests for it.
+   *  main, I could develop tests for it (edit: I wrote this before we learned how to test main).
    * @param argCount
    * @param args
    * @return
@@ -163,6 +163,7 @@ public class Project1 {
   /*
   After parsing the command line arguments, I have no check to ensure the end time and date is truly
   after the start time and date. Eg. the start date could be in the year 2050 while the end year is 2020.
+  We'll keep this open in case time travelers are using my program.
   */
   public static void main(String[] args) {
     int argCount = args.length;
@@ -230,7 +231,7 @@ public class Project1 {
             args[5+printYes],
             args[6+printYes]));
 
-    // There's only going to be one PhoneCall in project1, but this loop would iterate over all PhoneCalls the user has in their log
+    // There's only going to be at most one PhoneCall in project1, but this loop would iterate over all PhoneCalls the user has in their log
     if(printYes == 1){
       for (Object phoneRecords : bill.getPhoneCalls()) {
         System.out.println(phoneRecords);
