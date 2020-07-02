@@ -19,19 +19,43 @@ import static org.junit.Assert.assertEquals;
 public class Project1Test {
 
   @Test
-  public void invalidPhoneNumberTest1(){
+  public void numberTooShort(){
     // single number
     assertEquals(Project1.validPhoneNumber("5"), false);
   }
 
   @Test
-  public void invalidPhoneNumberTest2(){
+  public void tooManySectionsInNumber(){
+    // phone number with too many -s but correct length
+    assertEquals(Project1.validPhoneNumber("503-1-1-1111"), false);
+  }
+
+  @Test
+  public void tooFewSectionsInNumber(){
+    // phone number with too many -s but correct length
+    assertEquals(Project1.validPhoneNumber("5034141-1111"), false);
+  }
+
+  @Test
+  public void sectionOneHasTooManyNumbers(){
+    // sections one and two are wonky
+    assertEquals(Project1.validPhoneNumber("5034-11-1111"), false);
+  }
+
+  @Test
+  public void sectionTwoHasTooManyNumbers(){
+    // sections two and three are wonky
+    assertEquals(Project1.validPhoneNumber("503-1144-111"), false);
+  }
+
+  @Test
+  public void letterInPhoneNumber(){
     // phone number with an alpha char in it
     assertEquals(Project1.validPhoneNumber("5a3-111-1111"), false);
   }
 
   @Test
-  public void invalidPhoneNumberTest3(){
+  public void tooManyNumbersInLastSection(){
     // too many numbers
     assertEquals(Project1.validPhoneNumber("503-111-11112"), false);
   }
@@ -56,8 +80,14 @@ public class Project1Test {
 
   @Test
   public void moreThanThreeSections(){
-    // too many (or too few) / chars will end up with !=3 sections
+    // too many / chars will end up with >3 sections
     assertEquals(Project1.validDate("0/01/01/2020"), false);
+  }
+
+  @Test
+  public void lessThanThreeSections(){
+    // too many / chars will end up with >3 sections
+    assertEquals(Project1.validDate("01501/2020"), false);
   }
 
   @Test
@@ -73,31 +103,91 @@ public class Project1Test {
   }
 
   @Test
+  public void tooFewDigitsInTheFirstSection(){
+    // too few digits in the first section
+    assertEquals(Project1.validDate("/01/2020"), false);
+  }
+
+  @Test
   public void tooManyDigitsInTheSecondSection(){
-    // name
+    // too many digits in the second section
     assertEquals(Project1.validDate("01/001/2020"), false);
   }
 
   @Test
-  public void yearNeedsToBeFourDigits(){
+  public void tooFewDigitsInTheSecondSection(){
+    // too few digits in the second section
+    assertEquals(Project1.validDate("01//2020"), false);
+  }
+
+  @Test
+  public void yearNeedsToBeFourDigitsHigh(){
     // the year must be 4 digits-- no more, no less
     assertEquals(Project1.validDate("12/31/20200"), false);
   }
 
   @Test
-  public void invalidMonth(){
+  public void yearNeedsToBeFourDigitsLow(){
+    // the year must be 4 digits-- no more, no less
+    assertEquals(Project1.validDate("12/31/100"), false);
+  }
+
+  @Test
+  public void invalidMonthOver(){
     // months must be within [1,12]
     assertEquals(Project1.validDate("13/25/2020"), false);
   }
 
   @Test
-  public void invalidDay(){
+  public void invalidMonthUnder(){
+    // months must be within [1,12]
+    assertEquals(Project1.validDate("00/25/2020"), false);
+  }
+
+  @Test
+  public void invalidDayOver(){
     // days must be between 1 and 31
     assertEquals(Project1.validDate("12/40/2020"), false);
   }
 
   @Test
-  public void onAMonthThatCannotHaveThirtyOneDays(){
+  public void invalidDayUnder(){
+    // days must be between 1 and 31
+    assertEquals(Project1.validDate("12/00/2020"), false);
+  }
+
+  @Test
+  public void monthMustBeGreaterThan1999(){
+    // I think a valid date should be after the year 2000
+    assertEquals(Project1.validDate("11/20/1990"), false);
+  }
+
+  @Test
+  public void onAMonthThatCannotHaveThirtyOneDaysFeb(){
+    // Certain months never have 31 days
+    assertEquals(Project1.validDate("02/31/2020"), false);
+  }
+
+  @Test
+  public void onAMonthThatCannotHaveThirtyOneDaysApr(){
+    // Certain months never have 31 days
+    assertEquals(Project1.validDate("4/31/2020"), false);
+  }
+
+  @Test
+  public void onAMonthThatCannotHaveThirtyOneDaysJun(){
+    // Certain months never have 31 days
+    assertEquals(Project1.validDate("06/31/2020"), false);
+  }
+
+  @Test
+  public void onAMonthThatCannotHaveThirtyOneDaysASept(){
+    // Certain months never have 31 days
+    assertEquals(Project1.validDate("9/31/2020"), false);
+  }
+
+  @Test
+  public void onAMonthThatCannotHaveThirtyOneDaysNov(){
     // Certain months never have 31 days
     assertEquals(Project1.validDate("11/31/2020"), false);
   }
@@ -111,13 +201,13 @@ public class Project1Test {
   @Test
   public void validDateTest2(){
     // valid date with no leading zeroes
-    assertEquals(Project1.validDate("1/1/2020"), true);
+    assertEquals(Project1.validDate("5/1/2020"), true);
   }
 
   @Test
   public void validDateTest3(){
     // valid date-- no upper limit on the year (as long as it has 4 digits)
-    assertEquals(Project1.validDate("1/1/2025"), true);
+    assertEquals(Project1.validDate("8/1/2025"), true);
   }
 
   @Test
