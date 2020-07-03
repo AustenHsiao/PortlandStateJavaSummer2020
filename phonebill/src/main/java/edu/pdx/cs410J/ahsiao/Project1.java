@@ -199,7 +199,7 @@ public class Project1 {
     if(argCount < 7){
       System.err.println("Missing command line arguments. See -README");
       System.exit(1);
-    } else if(argCount > 8){ // maximum: -print (name, number1, number2, time1, date1, time2, date2) is 8 things
+    } else if(argCount > 9){ // maximum: -print -README (name, number1, number2, time1, date1, time2, date2) is 8 things
       System.err.println("Too many command line arguments. See -README");
       System.exit(1);
     }

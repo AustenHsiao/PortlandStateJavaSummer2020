@@ -59,9 +59,9 @@ public class Project1IT extends InvokeMainTestCase {
 
     @Test
     public void invokeMainWithTooManyArgumentsNoReadme(){
-        // Having >8 arguments in which none of them are equal to -README makes no sense.
-        // We have space for the bill name, 2 phone numbers, 2 dates, and 2 times (and maybe -print), which is 8 things maximum
-        InvokeMainTestCase.MainMethodResult result = invokeMain(Project1.class, "random", "hi", "heyyy", "haaaaaaay", "ok", "there", "7", "beep", "boop");
+        // Having >9 arguments in which none of them are equal to -README makes no sense.
+        // We have space for the bill name, 2 phone numbers, 2 dates, and 2 times (and maybe -print and -README), which is 9 things maximum
+        InvokeMainTestCase.MainMethodResult result = invokeMain(Project1.class, "random", "hi", "heyyy", "haaaaaaay", "ok", "there", "7", "beep", "boop", "test");
         assertThat(result.getTextWrittenToStandardError(), containsString("Too many command line arguments"));
         assertThat(result.getExitCode(), equalTo(1));
     }
