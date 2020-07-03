@@ -2,6 +2,10 @@ package edu.pdx.cs410J.ahsiao;
 
 import edu.pdx.cs410J.AbstractPhoneCall;
 
+/**
+ * Every phone call has a name, caller number, receiver number, start time/date, and end time/date.
+ * For a phone call, we should be able to view any of these pieces of info
+ */
 public class PhoneCall extends AbstractPhoneCall {
 
   /*
@@ -47,21 +51,37 @@ public class PhoneCall extends AbstractPhoneCall {
     this.endDate = endDate;
   }
 
+  /**
+   * Returns the callerNumber associated with the phonecall
+   * @return
+   */
   @Override
   public String getCaller() {
     return this.callerNumber;
   }
 
+  /**
+   * Returns the callee's number associated with the phonecall
+   * @return
+   */
   @Override
   public String getCallee() {
     return this.calleeNumber;
   }
 
+  /**
+   * Returns a string containing the start time and start date
+   * @return
+   */
   @Override
   public String getStartTimeString() {
     return this.startTime + " " + this.startDate;
   }
 
+  /**
+   * Returns a string containing the end time and end date
+   * @return
+   */
   @Override
   public String getEndTimeString() {
     return this.endTime + " " + this.endDate;

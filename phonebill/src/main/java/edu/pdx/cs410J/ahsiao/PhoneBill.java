@@ -4,6 +4,12 @@ import edu.pdx.cs410J.AbstractPhoneBill;
 import java.util.Collection;
 import java.util.ArrayList;
 
+/**
+ * A phone bill contains a list of phonecalls for a given user.
+ * A new phone bill may or may not contain a populated phonecall list.
+ * With an instantiated phone bill, we should be able to view the owner's name, view the list of phone calls
+ * and add new phone calls to the list.
+ */
 public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
     private String billOwner;
     private Collection<PhoneCall> billLog = new ArrayList<PhoneCall>();
@@ -26,17 +32,28 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
         billLog.add(call);
     }
 
-    // Return customer name (bill owner)
+    /**
+     * Returns the billOwner's name
+     * @return
+     */
     @Override
     public String getCustomer() {
         return this.billOwner;
     }
 
+    /**
+     * Adds a phone call to the bill
+     * @param phoneCall
+     */
     @Override
     public void addPhoneCall(PhoneCall phoneCall) {
         billLog.add(phoneCall);
     }
 
+    /**
+     * Returns a collection containing all phone calls on the bill
+     * @return
+     */
     @Override
     public Collection getPhoneCalls() {
         return this.billLog;
