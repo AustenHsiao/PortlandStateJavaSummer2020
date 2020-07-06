@@ -12,7 +12,7 @@ public class PhoneBillTest {
     }
 
     @Test public void addingPhoneCall(){
-        PhoneCall sampleCall = new PhoneCall("Bob",
+        PhoneCall sampleCall = new PhoneCall(
                 "503-111-1111",
                 "503-222-2222",
                 "06/26/2020",
@@ -29,7 +29,7 @@ public class PhoneBillTest {
 
     @Test
     public void addNewPhoneCallToBill(){
-        PhoneCall sampleCall = new PhoneCall("Bob",
+        PhoneCall sampleCall = new PhoneCall(
                 "503-111-1111",
                 "503-222-2222",
                 "06/26/2020",

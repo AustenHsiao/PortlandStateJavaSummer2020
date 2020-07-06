@@ -12,7 +12,6 @@ public class PhoneCall extends AbstractPhoneCall {
   Phone call information is stored privately within a PhoneCall object in case we need it for
   some sort of phone bill persistence later on
    */
-  private String callerName;
   private String callerNumber;
   private String calleeNumber;
   private String startTime;
@@ -26,7 +25,6 @@ public class PhoneCall extends AbstractPhoneCall {
    * as the start and end times/dates. In the context of Project1, these will be supplied by the command-line
    * arguments.
    *
-   * @param customerName
    * @param callerNumber
    * @param calleeNumber
    * @param startTime
@@ -35,14 +33,12 @@ public class PhoneCall extends AbstractPhoneCall {
    * @param endDate
    */
   PhoneCall(
-          String customerName,
           String callerNumber,
           String calleeNumber,
           String startDate,
           String startTime,
           String endDate,
           String endTime){
-    this.callerName = customerName;
     this.callerNumber = callerNumber;
     this.calleeNumber = calleeNumber;
     this.startTime = startTime;

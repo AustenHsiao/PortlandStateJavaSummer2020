@@ -223,8 +223,7 @@ public class Project1 {
     }
 
     // Create a new PhoneBill for the specified person and add in the new PhoneCall
-    PhoneBill bill = new PhoneBill(args[0+printYes], new PhoneCall(args[0+printYes],
-            args[1+printYes],
+    PhoneBill bill = new PhoneBill(args[0+printYes], new PhoneCall(args[1+printYes],
             args[2+printYes],
             args[3+printYes],
             args[4+printYes],

@@ -15,7 +15,6 @@ public class PhoneCallTest {
 
   private PhoneCall dummyPhoneCall(){
     return new PhoneCall(
-            "Austen",
             "111-111-1111",
             "222-222-2222",
             "1/11/2025",
