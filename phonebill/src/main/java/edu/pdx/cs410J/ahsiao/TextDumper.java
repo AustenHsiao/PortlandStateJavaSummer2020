@@ -21,7 +21,8 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper<PhoneBill>{
     public void dump(PhoneBill phoneBill) throws IOException {
         // If a file of the same name exists, it will be overwritten, we only want the contents
         // of the phoneBill passed in. This means that there's no support for customers with the same name.
-        // We could fix this by assigning each customer with a unique ID as their phonebills are instantiated.
+        // We could fix this by assigning each customer with a unique ID as their phonebills are instantiated, but
+        // this is not part of the assignment.
         FileWriter file = new FileWriter(phoneBill.getCustomer() + ".txt");
         file.flush();
         file.write("BILL FOR: " + phoneBill.getCustomer() + "\n");
