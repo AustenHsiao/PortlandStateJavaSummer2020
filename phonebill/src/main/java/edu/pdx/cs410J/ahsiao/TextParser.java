@@ -36,7 +36,7 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
 
             if(!extractedName.equals(name)){
                 // if the name given on the command line is different from the one in the file, inform user and exit.
-                System.err.println("Name given on command line is different that the one found in the text file. Exiting.");
+                System.err.println("Name given on command line is different than the one found in the text file. Exiting.");
                 System.exit(-1);
             }
             phonebill = parse();
