@@ -13,7 +13,7 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
     /**
      * The constructor requires a name in the form of a string. This name is supplied on the command
      * line.
-     * @param nameFromCmdLine
+     * @param nameFromCmdLine name as reported from the command line (not in the text file)
      */
     TextParser(String nameFromCmdLine){
         name = nameFromCmdLine;
@@ -25,7 +25,7 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
      * Takes in a fileName which is formatted in the same way that TextDumper writes text files. This
      * method will read the file into a class field ArrayList (fileRead). By parsing the first line captured in fileRead,
      * the name supplied on the command line is matched against the name within the file.
-     * @param fileName
+     * @param fileName name of text file to read from
      * @return
      */
     public PhoneBill read(String fileName){
@@ -35,9 +35,9 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
             extractedName = getNameFromFile();
 
             if(!extractedName.equals(name)){
-                // if the name given on the command line is different from the one in the file, inform user and exit.
-                System.err.println("Name given on command line is different than the one found in the text file. Exiting.");
-                System.exit(-1);
+                // if the name given on the command line is different from the one in the file, return a null phoneBill.
+                // This case will be handled in main.
+                return null;
             }
             phonebill = parse();
 
@@ -59,7 +59,7 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
      * Given a filename, populateArrayListFromFile() will read the file, populating the class field array list, "fileRead"
      * with the lines from the file. Errors in reading cause IO exceptions. If the file is not found, we throw a file not found
      * exception.
-     * @param fileName
+     * @param fileName name of text file
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -77,7 +77,7 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
      * getNameFromFile() takes no arguments and returns the customer's name from the text file.
      * If the file is empty, a parser exception is thrown. If the first line doesn't
      * have the correct formatting, then we also throw a parser exception.
-     * @return
+     * @return customer name from the text file
      */
     private String getNameFromFile() throws ParserException{
         if(fileRead.size() == 0){
@@ -103,7 +103,7 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
      * If we run this function, that means that the name matches the name from the file.
      * This function parses the text file line by line, adding phone calls as necessary.
      * Returns a PhoneBill.
-     * @return
+     * @return PhoneBill
      * @throws ParserException
      */
     @Override
@@ -111,17 +111,18 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
         PhoneBill tempPhoneBill = new PhoneBill(name);
         for(int lineIndex = 1; lineIndex < fileRead.size(); ++lineIndex){
             // for each line after the 0th, phone calls should be formatted as:
-            //  "Phone call from 503-111-1111 to 503-222-2222 from 13:00 01/11/2020 to 13:09 1/11/2020"
+            //  "Phone call from 503-111-1111 to 503-222-2222 from 01/11/2020 13:00 to 1/11/2020 13:09"
             // So we only care about index
             // 3, 5 - phone numbers
-            // 7, 10 - times
-            // 8, 11 - dates
+            // 7, 10 - dates
+            // 8, 11 - times
+
             // Since there are parsing functions for numbers, times, and dates statically declared in
             // the project1 class, I'm going to reuse those.
             String[] currentLine = fileRead.get(lineIndex).split(" ");
-            if(Project1.validPhoneNumber(currentLine[3]) == false || Project1.validPhoneNumber(currentLine[5]) == false ||
-                      Project1.validTime(currentLine[7]) == false || Project1.validTime(currentLine[10]) == false ||
-                      Project1.validDate(currentLine[8]) == false || Project1.validDate(currentLine[11]) == false){
+            if(!Project1.validPhoneNumber(currentLine[3]) || !Project1.validPhoneNumber(currentLine[5]) ||
+                    !Project1.validTime(currentLine[8]) || !Project1.validTime(currentLine[11]) ||
+                    !Project1.validDate(currentLine[7]) || !Project1.validDate(currentLine[10])){
                 throw new ParserException("Invalid formatting.");
             }
             PhoneCall tempPhoneCall = new PhoneCall(currentLine[3], currentLine[5], currentLine[7], currentLine[8], currentLine[10], currentLine[11]);

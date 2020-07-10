@@ -38,13 +38,13 @@ public class PhoneCallTest {
   @Test
   public void getStartTimeString() {
     PhoneCall call = dummyPhoneCall();
-    assertEquals(call.getStartTimeString(), "19:00 1/11/2025");
+    assertEquals(call.getStartTimeString(), "1/11/2025 19:00");
   }
 
   @Test
   public void getEndTimeString() {
     PhoneCall call = dummyPhoneCall();
-    assertEquals(call.getEndTimeString(), "19:10 02/22/2020");
+    assertEquals(call.getEndTimeString(), "02/22/2020 19:10");
   }
 
   @Test

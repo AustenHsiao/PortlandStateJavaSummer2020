@@ -71,7 +71,7 @@ public class PhoneCall extends AbstractPhoneCall {
    */
   @Override
   public String getStartTimeString() {
-    return this.startTime + " " + this.startDate;
+    return this.startDate + " " + this.startTime;
   }
 
   /**
@@ -80,6 +80,6 @@ public class PhoneCall extends AbstractPhoneCall {
    */
   @Override
   public String getEndTimeString() {
-    return this.endTime + " " + this.endDate;
+    return this.endDate + " " + this.endTime;
   }
 }
