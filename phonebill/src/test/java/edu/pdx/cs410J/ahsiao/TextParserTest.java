@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.ahsiao;
 
+import edu.pdx.cs410J.ParserException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -28,4 +29,25 @@ public class TextParserTest {
         assertEquals(bobPhoneBill.getCustomer(), "Bob");
         assertEquals(bobPhoneBill.getPhoneCalls().size(), 1);
     }
+
+    @Test
+    public void readingFromEmptyTextFile(){
+        // reading from an empty file causes parser exception which is handled inside read().
+        // The result will be an empty phone bill.
+        TextParser test = new TextParser("Bob");
+        PhoneBill bobPhoneBill = test.read("Empty.txt");
+        assertEquals(bobPhoneBill.getCustomer(), "Bob");
+        assertEquals(bobPhoneBill.getPhoneCalls().size(), 0);
+    }
+
+    @Test
+    public void readingFromTextFileButIndividualFieldIsInvalid(){
+        // If one of the fields inside the text file is malformed, it also returns
+        // and empty PhoneBill.
+        TextParser test = new TextParser("Bob");
+        PhoneBill bobPhoneBill = test.read("FunkyBob.txt");
+        assertEquals(bobPhoneBill.getCustomer(), "Bob");
+        assertEquals(bobPhoneBill.getPhoneCalls().size(), 0);
+    }
+
 }
