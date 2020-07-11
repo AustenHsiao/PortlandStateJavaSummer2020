@@ -41,21 +41,23 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
             extractedName = getNameFromFile();
 
             if(!extractedName.equals(name)){
-                // if the name given on the command line is different from the one in the file, return a null phoneBill.
+                // if the name given on the command line is different from the one in the file, throws parserException.
                 // This case will be handled in main.
-                return null;
+                throw new ParserException("Names don't match");
             }
             phonebill = parse();
 
         }catch(FileNotFoundException e){
+            // If we didnt find the file, it still makes a new phonebill.
             phonebill = new PhoneBill(name);
         }catch(IOException e){
-            // and IO exception is not good, so we exit from here
-            System.err.println("Error reading file.");
-            System.exit(-1);
+            // and IO exception is not good, so we return a null phonebill
+            // this is handled gracefully in main
+            phonebill = null;
         }catch(ParserException e){
-            System.err.println("File incorrectly formatted. No phone call data imported");
-            phonebill = new PhoneBill(name);
+            // If the file format is not right, we return a null phonebill-- either if the name in the file does not match the
+            // command line argument, or the file is not formatted correctly.
+            phonebill = null;
         }finally{
             return phonebill;
         }

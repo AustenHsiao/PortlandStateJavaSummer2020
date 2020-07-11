@@ -4,6 +4,7 @@ import edu.pdx.cs410J.ParserException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class TextParserTest {
 
@@ -16,9 +17,9 @@ public class TextParserTest {
 
     @Test
     public void readingFromIncorrectlyFormattedFileShouldGiveParserError(){
-        // If the text file is incorrectly formatted, we do the same as above-- make an empty phone bill
+        // If the text file is incorrectly formatted, we should not make a phonebill.
         TextParser test = new TextParser("commandLineNameExample");
-        assertEquals(test.read("formatTest.txt").getCustomer(), "commandLineNameExample");
+        assertNull(test.read("formatTest.txt"));
     }
 
     @Test
@@ -32,22 +33,16 @@ public class TextParserTest {
 
     @Test
     public void readingFromEmptyTextFile(){
-        // reading from an empty file causes parser exception which is handled inside read().
-        // The result will be an empty phone bill.
+        // Trying to read in a phone bill from an empty file should not create a new phone bill
         TextParser test = new TextParser("Bob");
-        PhoneBill bobPhoneBill = test.read("Empty.txt");
-        assertEquals(bobPhoneBill.getCustomer(), "Bob");
-        assertEquals(bobPhoneBill.getPhoneCalls().size(), 0);
+        assertNull(test.read("Empty.txt"));
     }
 
     @Test
     public void readingFromTextFileButIndividualFieldIsInvalid(){
-        // If one of the fields inside the text file is malformed, it also returns
-        // and empty PhoneBill.
+        // If one of the fields inside the text file is malformed, no phone bill should be created
         TextParser test = new TextParser("Bob");
-        PhoneBill bobPhoneBill = test.read("FunkyBob.txt");
-        assertEquals(bobPhoneBill.getCustomer(), "Bob");
-        assertEquals(bobPhoneBill.getPhoneCalls().size(), 0);
+        assertNull(test.read("FunkyBob.txt"));
     }
 
 }

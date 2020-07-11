@@ -74,7 +74,7 @@ public class Project2IT extends InvokeMainTestCase {
     @Test
     public void invokeMainValidArgumentsWithSpecifiedFileButMismatchedNames(){
         InvokeMainTestCase.MainMethodResult result = invokeMain(Project2.class, "-textFile", "Bob.txt", "name", "503-123-1234", "503-544-5678", "01/11/2011", "01:00", "01/12/2020", "01:11");
-        assertThat(result.getTextWrittenToStandardError(),  containsString("Name given on command line is different than the one found in the text file."));
+        assertThat(result.getTextWrittenToStandardError(),  containsString("Name in file does not match command line argument and/or malformed text file."));
         assertEquals(result.getExitCode().toString(), "-3");
     }
 

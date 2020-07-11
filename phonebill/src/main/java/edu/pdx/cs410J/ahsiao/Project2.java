@@ -127,7 +127,7 @@ public class Project2 {
             // two users with the same name will have conflicting filenames-- I did not handle this in my project implementation.
             TextParser readIn = new TextParser(args[fileSpecified + printSpecified]);
             if( (userPhoneBill = readIn.read(args[fileNameIndex])) == null ){
-                System.err.println("Name given on command line is different than the one found in the text file.");
+                System.err.println("Name in file does not match command line argument and/or malformed text file.");
                 System.exit(-3);
             }
 
