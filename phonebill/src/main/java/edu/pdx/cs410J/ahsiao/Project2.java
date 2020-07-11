@@ -40,6 +40,8 @@ public class Project2 {
                 System.err.println("Missing command line arguments");
                 System.exit(-1);
             case 0:
+                // I decided to read the README from a text file this time-- as opposed to hardcoding it in project 1.
+                // This required some exception handling though.
                 try (InputStream readme = Project1.class.getResourceAsStream("README.txt");){
                     String line;
                     BufferedReader read = new BufferedReader(new InputStreamReader(readme));
@@ -121,7 +123,8 @@ public class Project2 {
             // If we're going to read/write the phone bill:
             //  Try to read in the file specified on the command line
             //  Populate the bill with the supplied phone call
-            //  write to file (<userName>.txt).
+            //  write to file (<userName>.txt). This means that
+            // two users with the same name will have conflicting filenames-- I did not handle this in my project implementation.
             TextParser readIn = new TextParser(args[fileSpecified + printSpecified]);
             if( (userPhoneBill = readIn.read(args[fileNameIndex])) == null ){
                 System.err.println("Name given on command line is different than the one found in the text file.");
@@ -131,11 +134,11 @@ public class Project2 {
             userPhoneBill.addPhoneCall(newCall);
             TextDumper.write(userPhoneBill);
         }else{
-            userPhoneBill = new PhoneBill(args[fileSpecified + printSpecified], newCall);
+            userPhoneBill = new PhoneBill(args[fileSpecified + printSpecified], newCall); // does not save
         }
 
         if(printSpecified != 0){
-            System.out.println(newCall.toString());
+            System.out.println(newCall.toString()); // only prints out the new call.
         }
         System.exit(0);
     }

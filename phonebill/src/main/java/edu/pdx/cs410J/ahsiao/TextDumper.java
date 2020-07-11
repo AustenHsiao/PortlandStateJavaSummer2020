@@ -5,6 +5,12 @@ import java.io.IOException;
 
 public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper<PhoneBill>{
 
+    /**
+     * the write() method exists to make using TextDumper easier. Instead of having to instantiate a TextDumper object,
+     * then calling dump(), a user can use this static method.
+     * @param phoneBill The PhoneBill to dump to text file
+     * @return int-- mostly used for testing and debugging
+     */
     public static int write(PhoneBill phoneBill){
         // this will let us use dump() more easily
         try{
@@ -17,6 +23,14 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper<PhoneBill>{
         }
     }
 
+    /**
+     * dump is the implementation of the abstract method from PhoneBillDumper.
+     * This method takes in a PhoneBill to dump. Based on the customer name, a text
+     * file is created and each PhoneCall in the object is written to the file using the
+     * toString() method.
+     * @param phoneBill PhoneBill to dump to text
+     * @throws IOException
+     */
     @Override
     public void dump(PhoneBill phoneBill) throws IOException {
         // If a file of the same name exists, it will be overwritten, we only want the contents

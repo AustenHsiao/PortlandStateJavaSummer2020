@@ -4,6 +4,10 @@ import edu.pdx.cs410J.ParserException;
 import java.io.*;
 import java.util.ArrayList;
 
+
+/** The TextParser class handles parsing a file, reading the header and subsequent lines,
+ * and forming a PhoneBill from the information.
+ */
 public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
 
     private ArrayList<String> fileRead; // this is our buffer to which we populate from file
@@ -24,7 +28,9 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
     /**
      * Takes in a fileName which is formatted in the same way that TextDumper writes text files. This
      * method will read the file into a class field ArrayList (fileRead). By parsing the first line captured in fileRead,
-     * the name supplied on the command line is matched against the name within the file.
+     * the name supplied on the command line is matched against the name within the file. Then we parse the populated array list.
+     * This method ensures that the private methods of this class are run in the correct order. This function also
+     * error handles the various exceptions that may arise.
      * @param fileName name of text file to read from
      * @return
      */
@@ -58,7 +64,7 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
     /**
      * Given a filename, populateArrayListFromFile() will read the file, populating the class field array list, "fileRead"
      * with the lines from the file. Errors in reading cause IO exceptions. If the file is not found, we throw a file not found
-     * exception.
+     * exception. This is a private method because it must be run in a specific order to work properly.
      * @param fileName name of text file
      * @throws FileNotFoundException
      * @throws IOException
@@ -74,7 +80,8 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
     }
 
     /**
-     * getNameFromFile() takes no arguments and returns the customer's name from the text file.
+     * getNameFromFile() takes no arguments and returns the customer's name from the text file based on the
+     * class field array list-- this means that populateArrayListFromFile should be run first-- this is a private method.
      * If the file is empty, a parser exception is thrown. If the first line doesn't
      * have the correct formatting, then we also throw a parser exception.
      * @return customer name from the text file
