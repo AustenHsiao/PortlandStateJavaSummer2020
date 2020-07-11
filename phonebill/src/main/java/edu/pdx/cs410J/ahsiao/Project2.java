@@ -121,10 +121,9 @@ public class Project2 {
 
         if(fileSpecified != 0){
             // If we're going to read/write the phone bill:
-            //  Try to read in the file specified on the command line
-            //  Populate the bill with the supplied phone call
-            //  write to file (<userName>.txt). This means that
-            // two users with the same name will have conflicting filenames-- I did not handle this in my project implementation.
+            //  Try to read in the file specified on the command line,
+            //  Populate the bill with the supplied phone call, then
+            //  write to file.
             TextParser readIn = new TextParser(args[fileSpecified + printSpecified]);
             if( (userPhoneBill = readIn.read(args[fileNameIndex])) == null ){
                 System.err.println("Name in file does not match command line argument and/or malformed text file.");
@@ -132,7 +131,7 @@ public class Project2 {
             }
 
             userPhoneBill.addPhoneCall(newCall);
-            TextDumper.write(userPhoneBill);
+            TextDumper.write(args[fileNameIndex], userPhoneBill);
         }else{
             userPhoneBill = new PhoneBill(args[fileSpecified + printSpecified], newCall); // does not save
         }
