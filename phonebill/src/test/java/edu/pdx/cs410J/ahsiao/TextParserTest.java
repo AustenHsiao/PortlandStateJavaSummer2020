@@ -21,6 +21,13 @@ public class TextParserTest {
     @Test
     public void readingFromIncorrectlyFormattedFileShouldGiveParserError(){
         // If the text file is incorrectly formatted, we should not make a phonebill.
+        try {
+            FileWriter malformedField = new FileWriter("formatTest.txt");
+            malformedField.write("This is a random string that makes this text file incorrectly formatted.");
+            malformedField.flush();
+        }catch(IOException e){
+            System.out.println("This test has failed due to IOException");
+        }
         TextParser test = new TextParser("commandLineNameExample");
         assertNull(test.read("formatTest.txt"));
     }
