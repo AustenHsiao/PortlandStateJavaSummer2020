@@ -86,6 +86,13 @@ public class Project2IT extends InvokeMainTestCase {
     }
 
     @Test
+    public void invokeMainValidArgumentsWithSpecifiedFileButFileDoesntExist(){
+        // Should run to completion and we can manually verify that Bob.txt has been updated
+        InvokeMainTestCase.MainMethodResult result = invokeMain(Project2.class, "-textFile", "aName.txt", "Bob", "503-123-1234", "503-544-5678", "01/11/2011", "01:00", "01/12/2020", "01:11");
+        assertEquals(result.getExitCode().toString(), "0");
+    }
+
+    @Test
     public void invokeMainWithBadPhoneNumber1(){
         // args[1] has a bad phone number-- too many digits in the last section
         InvokeMainTestCase.MainMethodResult result = invokeMain(Project2.class, "name", "503-123-12334", "503-230-5678", "01/11/2011", "1:00", "01/12/2020", "01:11");
