@@ -34,9 +34,17 @@ public class TextParserTest {
 
     @Test
     public void readingFromCorrectlyGeneratedTextFile(){
-        // BobFile is made in a different test (project2 main test)
+        try {
+            FileWriter file = new FileWriter("BobFile1.txt");
+            file.write("BILL FOR: Bob\n");
+            file.flush();
+            file.write("Phone call from 503-111-1111 to 503-222-2222 from 01/11/2020 13:00 to 1/11/2020 13:09\n");
+            file.flush();
+        }catch(IOException e){
+            System.out.println("This test has failed due to IOException");
+        }
         TextParser test = new TextParser("Bob");
-        PhoneBill bobPhoneBill = test.read("BobFile.txt");
+        PhoneBill bobPhoneBill = test.read("BobFile1.txt");
         assertEquals(bobPhoneBill.getCustomer(), "Bob");
         assertEquals(bobPhoneBill.getPhoneCalls().size(), 1);
     }

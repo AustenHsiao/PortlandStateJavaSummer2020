@@ -1,6 +1,10 @@
 package edu.pdx.cs410J.ahsiao;
+
 import edu.pdx.cs410J.InvokeMainTestCase;
 import org.junit.Test;
+
+import java.io.FileWriter;
+import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -73,14 +77,34 @@ public class Project2IT extends InvokeMainTestCase {
 
     @Test
     public void invokeMainValidArgumentsWithSpecifiedFileButMismatchedNames(){
-        InvokeMainTestCase.MainMethodResult result = invokeMain(Project2.class, "-textFile", "Bob.txt", "name", "503-123-1234", "503-544-5678", "01/11/2011", "01:00", "01/12/2020", "01:11");
+        try {
+            FileWriter file = new FileWriter("Bob1.txt");
+            file.write("BILL FOR: Bob\n");
+            file.flush();
+            file.write("Phone call from 503-111-1111 to 503-222-2222 from 01/11/2020 13:00 to 1/11/2020 13:09\n");
+            file.flush();
+        }catch(IOException e){
+            System.out.println("This test has failed due to IOException");
+        }
+
+        InvokeMainTestCase.MainMethodResult result = invokeMain(Project2.class, "-textFile", "Bob1.txt", "name", "503-123-1234", "503-544-5678", "01/11/2011", "01:00", "01/12/2020", "01:11");
         assertThat(result.getTextWrittenToStandardError(),  containsString("Name in file does not match command line argument and/or malformed text file."));
         assertEquals(result.getExitCode().toString(), "-3");
     }
 
     @Test
-    public void invokeMainValidArgumentsWithSpecifiedFileButMatchingNames(){
+    public void invokeMainValidArgumentsWithSpecifiedFileAndMatchingNames(){
         // Should run to completion and we can manually verify that Bob.txt has been updated
+        try {
+            FileWriter file = new FileWriter("Bob.txt");
+            file.write("BILL FOR: Bob\n");
+            file.flush();
+            file.write("Phone call from 503-111-1111 to 503-222-2222 from 01/11/2020 13:00 to 1/11/2020 13:09\n");
+            file.flush();
+        }catch(IOException e){
+            System.out.println("This test has failed due to IOException");
+        }
+
         InvokeMainTestCase.MainMethodResult result = invokeMain(Project2.class, "-textFile", "Bob.txt", "Bob", "503-123-1234", "503-544-5678", "01/11/2011", "01:00", "01/12/2020", "01:11");
         assertEquals(result.getExitCode().toString(), "0");
     }
