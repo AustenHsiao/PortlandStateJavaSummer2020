@@ -26,7 +26,7 @@ public class TextParserTest {
     public void readingFromCorrectlyGeneratedTextFile(){
         // Bob.txt is correctly formatted with 1 phone call, so the length of the phone bill list should be 1, along with the right name.
         TextParser test = new TextParser("Bob");
-        PhoneBill bobPhoneBill = test.read("Bob.txt");
+        PhoneBill bobPhoneBill = test.read("BobRead.txt");
         assertEquals(bobPhoneBill.getCustomer(), "Bob");
         assertEquals(bobPhoneBill.getPhoneCalls().size(), 1);
     }
