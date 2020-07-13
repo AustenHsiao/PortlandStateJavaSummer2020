@@ -75,17 +75,12 @@ public class Project2 {
             System.exit(50);
         }
 
-        if(args.length > 6 + fileSpecified + printSpecified + 1){
-            System.err.println("Unrecognized command line arguments.");
-            System.exit(51);
-        }
-
         if(length - start < 7){
             System.err.println("Missing command line arguments");
             System.exit(-53);
         }else if(length - start > 7){
             System.err.println("Too many command line arguments");
-            System.exit(-53);
+            System.exit(-54);
         }
 
         // Check phone numbers-- copied over from Project1

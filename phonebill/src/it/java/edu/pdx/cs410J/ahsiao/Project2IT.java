@@ -164,4 +164,36 @@ public class Project2IT extends InvokeMainTestCase {
         assertThat(result.getTextWrittenToStandardError(), containsString("Invalid time"));
         assertThat(result.getExitCode(), equalTo(5));
     }
+
+    @Test
+    public void invokeMainWithBadOptions(){
+        // args[6] has a bad time-- too many digits in the second section
+        InvokeMainTestCase.MainMethodResult result = invokeMain(Project2.class, "-fakeoption", "name", "503-123-1234", "503-544-5678", "01/11/2011", "01:00", "01/12/2020", "01:10");
+        assertThat(result.getTextWrittenToStandardError(), containsString("Unrecognized option"));
+        assertThat(result.getExitCode(), equalTo(50));
+    }
+
+    @Test
+    public void invokeMainWithExtraArgumentsOtherwiseValid(){
+        // args[6] has a bad time-- too many digits in the second section
+        InvokeMainTestCase.MainMethodResult result = invokeMain(Project2.class, "name", "503-123-1234", "503-544-5678", "01/11/2011", "01:00", "01/12/2020", "01:10", "hi");
+        assertThat(result.getTextWrittenToStandardError(), containsString("Too many command line arguments"));
+        assertThat(result.getExitCode(), equalTo(-54));
+    }
+
+    @Test
+    public void invokeMainWithValidOptionsButTooFewArguments(){
+        // args[6] has a bad time-- too many digits in the second section
+        InvokeMainTestCase.MainMethodResult result = invokeMain(Project2.class, "-print", "-textFile", "file.txt", "name", "503-544-5678", "01/11/2011", "01:00", "01/12/2020", "01:10");
+        assertThat(result.getTextWrittenToStandardError(), containsString("Missing command line arguments"));
+        assertThat(result.getExitCode(), equalTo(-53));
+    }
+
+    @Test
+    public void invokeMainWithValidOptionsButTooManyArguments(){
+        // args[6] has a bad time-- too many digits in the second section
+        InvokeMainTestCase.MainMethodResult result = invokeMain(Project2.class, "-print", "-textFile", "file.txt", "name", "503-123-1234", "503-544-5678", "01/11/2011", "01:00", "01/12/2020", "01:11", "hi");
+        assertThat(result.getTextWrittenToStandardError(), containsString("Too many command line arguments"));
+        assertThat(result.getExitCode(), equalTo(-54));
+    }
 }
