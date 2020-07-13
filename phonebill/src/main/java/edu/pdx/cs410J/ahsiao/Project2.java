@@ -4,93 +4,89 @@ import java.io.*;
 
 public class Project2 {
 
-    /**
-     * Takes in the command line arguments to look for any option flags.
-     * Since the maximum length of the options is 4 (-textFile file, -print, -README),
-     * it parses the arguments if the length is 0 - (>=4). The minimum number
-     * of arguments we can have is 7, maximum = 11
-     *
-     * @param args command line arguments
-     * @return int, -2-> Too many arguments
-     *              -1-> Not enough arguments
-     *               0-> -README is found
-     *               1-> Could be valid
-     */
-    private static int switchOption(String[] args){
-        int length = args.length;
-
-        if(length == 0){
-            return -1;
-        }else if(length <= 4){
-            for(int i = 0; i < length; ++i){
-                if("-README".equals(args[i])){return 0;}
+    public static void print_readme(){
+        try (InputStream readme = Project1.class.getResourceAsStream("README.txt");){
+            String line;
+            BufferedReader read = new BufferedReader(new InputStreamReader(readme));
+            while( (line = read.readLine()) != null){
+                System.out.println(line);
             }
-        }else if(length > 11){
-            return -2;
+        }catch(FileNotFoundException e){
+            System.err.println("Cannot find readme file.");
+        }catch(IOException e){
+            System.err.println("Cannot read readme file.");
         }
-        return 1;
     }
 
     public static void main(String[] args) {
-        switch(switchOption(args)){
-            case -2:
-                System.err.println("Too many command line arguments");
-                System.exit(-2);
-            case -1:
-                System.err.println("Missing command line arguments");
-                System.exit(-1);
-            case 0:
-                // I decided to read the README from a text file this time-- as opposed to hardcoding it in project 1.
-                // This required some exception handling though.
-                try (InputStream readme = Project1.class.getResourceAsStream("README.txt");){
-                    String line;
-                    BufferedReader read = new BufferedReader(new InputStreamReader(readme));
-                    while( (line = read.readLine()) != null){
-                            System.out.println(line);
-                    }
-                }catch(FileNotFoundException e){
-                    System.err.println("Cannot find readme file.");
-                }catch(IOException e){
-                    System.err.println("Cannot read readme file.");
-                }finally {
-                    System.exit(0);
-                }
-            case 1:
-        }
+        int length = args.length;
 
-        // Getting to this point means that we have more than 4 arguments and less than 12.
-        // The user is required to include phone call data, so we need to have at least 7 arguments.
-        // We can have between 0 and 3 arguments for options (-README is already taken care of):
-        //  -textFile file <- two arguments
-        //  -print <- one argument
-        if(args.length < 7){
+        if(length == 0){
             System.err.println("Missing command line arguments");
             System.exit(-1);
+        }else if(length > 11) {
+            System.err.println("Too many command line arguments");
+            System.exit(-2);
+        }else if(length > 0 && length < 7){
+            int stop_index;
+            if(length >=4){
+                stop_index = 4;
+            }else{
+                stop_index = length;
+            }
+
+            for(int i = 0; i < stop_index; ++i){
+                if("-README".equals(args[i])){
+                    Project2.print_readme();
+                    System.exit(0);
+                }
+            }
+            System.err.println("Malformed command line arguments. Missing arguments.");
+            System.exit(1);
         }
 
-        // Scan the first 3 arguments looking for -textFile and/or -print flags.
+        // if we're out here that means we have 7+ arguments
         int printSpecified = 0;
         int fileSpecified = 0;
-        int fileNameIndex = -1;
+        int fileNameIndex = 0;
+        int unrecognizedOptions = 0;
+        int start = 0;
 
-        for(int i = 0; i < 3; ++i){
-            if("-textFile".equals(args[i])){
-                fileNameIndex = (i+1);
+        // parse options
+        for(int i = 0; i < (length-7); ++i){
+            if("-README".equals(args[i])){
+                Project2.print_readme();
+                System.exit(0);
+            }else if("-print".equals(args[i])){
+                printSpecified = 1;
+                ++start;
+            }else if("-textFile".equals(args[i])){
                 fileSpecified = 2;
-            }else if("-print".equals(args[i])){printSpecified = 1;}
+                fileNameIndex = (i+1);
+                ++start;
+                ++start;
+            }else if(args[i].charAt(0) == '-'){
+                ++unrecognizedOptions;
+            }
         }
 
-        /*
-            We can use the printSpecified and fileSpecified flags as shifts to read correct command line arguments:
-                I'm writing it out here for my own reference.
-                name = args[0 + fileSpecified + printSpecified]
-                numberFrom = args[1 + fileSpecified + printSpecified]
-                numberTo = args[2 + fileSpecified + printSpecified]
-                startDate = args[3 + fileSpecified + printSpecified]
-                startTime = args[4 + fileSpecified + printSpecified]
-                endDate = args[5 + fileSpecified + printSpecified]
-                endTime = args[6 + fileSpecified + printSpecified]
-         */
+        if(unrecognizedOptions > 0){
+            System.err.println("Unrecognized option");
+            System.exit(50);
+        }
+
+        if(args.length > 6 + fileSpecified + printSpecified + 1){
+            System.err.println("Unrecognized command line arguments.");
+            System.exit(51);
+        }
+
+        if(length - start < 7){
+            System.err.println("Missing command line arguments");
+            System.exit(-53);
+        }else if(length - start > 7){
+            System.err.println("Too many command line arguments");
+            System.exit(-53);
+        }
 
         // Check phone numbers-- copied over from Project1
         if(!Project1.validPhoneNumber(args[1 + fileSpecified + printSpecified]) || !Project1.validPhoneNumber(args[2 + fileSpecified + printSpecified])){
@@ -109,6 +105,9 @@ public class Project2 {
             System.err.println("Invalid time. Time must be in the 24-hour format (xx:xx)");
             System.exit(5);
         }
+
+
+
 
         PhoneBill userPhoneBill;
         PhoneCall newCall = new PhoneCall(

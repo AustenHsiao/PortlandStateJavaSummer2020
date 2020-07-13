@@ -58,8 +58,8 @@ public class Project2IT extends InvokeMainTestCase {
     @Test
     public void invokeMain5ArgumentsNoReadme(){
         InvokeMainTestCase.MainMethodResult result = invokeMain(Project2.class, "1", "1", "1", "1", "1");
-        assertThat(result.getTextWrittenToStandardError(), containsString("Missing command line arguments"));
-        assertEquals(result.getExitCode().toString(), "-1");
+        assertThat(result.getTextWrittenToStandardError(), containsString("Missing arguments"));
+        assertEquals(result.getExitCode().toString(), "1");
     }
 
     @Test

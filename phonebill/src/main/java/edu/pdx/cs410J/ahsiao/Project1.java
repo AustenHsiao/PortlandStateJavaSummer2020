@@ -97,6 +97,7 @@ public class Project1 {
         return false;
       }
     }
+    if(splitTime[1].length() != 2){return false;}
     int hour = parseInt(splitTime[0]);
     int minute = parseInt(splitTime[1]);
 
