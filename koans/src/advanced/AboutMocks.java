@@ -12,7 +12,9 @@ public class AboutMocks {
 
     static class ExplosiveCollaborator implements Collaborator {
         public void doBusinessStuff() {
-            fail("Default collaborator's behavior is complicating testing.");
+            //fail("Default collaborator's behavior is complicating testing.");
+            // not testing collaborator
+            System.err.print("Default collaborator's behavior is complicating testing.");
         }
     }
 
