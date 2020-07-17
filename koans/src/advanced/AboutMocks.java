@@ -12,9 +12,7 @@ public class AboutMocks {
 
     static class ExplosiveCollaborator implements Collaborator {
         public void doBusinessStuff() {
-            //fail("Default collaborator's behavior is complicating testing.");
-            // not testing collaborator
-            System.err.print("Default collaborator's behavior is complicating testing.");
+            fail("Default collaborator's behavior is complicating testing.");
         }
     }
 
@@ -24,7 +22,13 @@ public class AboutMocks {
         public ClassUnderTest() {
             // default is to pass a broken Collaborator, test should pass one
             // that doesn't throw exception
-            this(new ExplosiveCollaborator());
+            //this(new ExplosiveCollaborator());
+
+            this(new Collaborator(){
+                public void doBusinessStuff(){
+                    System.out.println("Safe anonymous class passed in.");
+                }
+            });
         }
 
         public ClassUnderTest(Collaborator c) {
