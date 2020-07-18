@@ -134,8 +134,8 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
                     !Project1.validDate(currentLine[7]) || !Project1.validDate(currentLine[10])){
                 throw new ParserException("Invalid formatting.");
             }
-            PhoneCall tempPhoneCall = new PhoneCall(currentLine[3], currentLine[5], currentLine[7], currentLine[8], currentLine[10], currentLine[11]);
-            tempPhoneBill.addPhoneCall(tempPhoneCall);
+            //PhoneCall tempPhoneCall = new PhoneCall(currentLine[3], currentLine[5], currentLine[7], currentLine[8], currentLine[10], currentLine[11]);
+            //tempPhoneBill.addPhoneCall(tempPhoneCall);
         }
         return tempPhoneBill;
     }

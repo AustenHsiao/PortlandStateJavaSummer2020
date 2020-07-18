@@ -167,6 +167,7 @@ public class Project1 {
   We'll keep this open in case time travelers are using my program.
   */
   public static void main(String[] args) {
+    /*
     int argCount = args.length;
     int printYes = 0;
 
@@ -178,13 +179,14 @@ public class Project1 {
         Project1.printREADME();
         System.exit(2);
       case 0:
-    }
+    }*/
 
     /* After calling parseOptions, if the exit cases aren't triggered, this means that we have at least 2 arguments that are
     not -README. So if either of the first two arguments are -print, we set printYes to 1. This is a flag that tells us to
     print out the phone call at the end of this method. It also serves as a shift-- I accessed the command line arguments
     by index, so if the -print flag is set, we need to increment all the accessing indices by 1. Note that the default value
     for printYes is 0*/
+    /*
     if("-print".equals(args[0])){
       printYes = 1;
     }
@@ -238,5 +240,6 @@ public class Project1 {
       }
     }
     System.exit(0);
-  }
+  }*/
+}
 }

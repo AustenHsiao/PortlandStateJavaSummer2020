@@ -2,30 +2,34 @@ package edu.pdx.cs410J.ahsiao;
 
 import edu.pdx.cs410J.AbstractPhoneCall;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * Every phone call has a name, caller number, receiver number, start time/date, and end time/date.
  * For a phone call, we should be able to view any of these pieces of info
  */
-public class PhoneCall extends AbstractPhoneCall {
+public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall>{
 
-  /*
-  Phone call information is stored privately within a PhoneCall object in case we need it for
-  some sort of phone bill persistence later on
-   */
   private String callerNumber;
   private String calleeNumber;
   private String startTime;
+  private String startAM_PM;
   private String startDate;
   private String endTime;
+  private String endAM_PM;
   private String endDate;
 
   /**
    *
    * Constructor for a single phone call. Every phone call captures the caller/callee names and numbers as well
    * as the start and end times/dates. In the context of Project1, these will be supplied by the command-line
-   * arguments.
+   * arguments. Here in project 3 we assume that the dates passed in are in the form MM/dd/yyyy
    *
    * @param callerNumber
    * @param calleeNumber
@@ -39,13 +43,17 @@ public class PhoneCall extends AbstractPhoneCall {
           String calleeNumber,
           String startDate,
           String startTime,
+          String startAM_PM,
           String endDate,
-          String endTime){
+          String endTime,
+          String endAM_PM){
     this.callerNumber = callerNumber;
     this.calleeNumber = calleeNumber;
     this.startTime = startTime;
+    this.startAM_PM = startAM_PM;
     this.startDate = startDate;
     this.endTime = endTime;
+    this.endAM_PM = endAM_PM;
     this.endDate = endDate;
   }
 
@@ -73,8 +81,7 @@ public class PhoneCall extends AbstractPhoneCall {
    */
   @Override
   public String getStartTimeString() {
-
-    return this.startDate + " " + this.startTime;
+    return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(getStartTime());
   }
 
   /**
@@ -83,16 +90,51 @@ public class PhoneCall extends AbstractPhoneCall {
    */
   @Override
   public String getEndTimeString() {
-    return this.endDate + " " + this.endTime;
+    return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(getEndTime());
   }
 
   @Override
   public Date getStartTime() {
-    return null;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+    try {
+      Date start = df.parse(this.startDate);
+      String[] splitTime = this.startTime.split(":");
+      int hour = parseInt(splitTime[0]);
+      int minute = parseInt(splitTime[1]);
+      if(this.startAM_PM.equalsIgnoreCase("PM")){
+        return new Date((long)(start.getTime() + ((hour+12) * 3.6e+6) + (minute * 6e+4)));
+      }
+      return new Date((long)(start.getTime() + (hour * 3.6e+6) + (minute * 6e+4)));
+    }catch(ParseException e){
+      return null;
+    }
   }
 
   @Override
   public Date getEndTime() {
-    return null;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+    try {
+      Date end = df.parse(this.endDate);
+      String[] splitTime = this.endTime.split(":");
+      int hour = parseInt(splitTime[0]);
+      int minute = parseInt(splitTime[1]);
+      if(this.endAM_PM.equalsIgnoreCase("PM")){
+        return new Date((long)(end.getTime() + ((hour+12) * 3.6e+6) + (minute * 6e+4)));
+      }
+      return new Date((long)(end.getTime() + (hour * 3.6e+6) + (minute * 6e+4)));
+    }catch(ParseException e){
+      return null;
+    }
+  }
+
+  @Override
+  public int compareTo(PhoneCall o) {
+    if(this.getStartTime().before(o.getStartTime())){
+      return -1;
+    }else if(this.getStartTime().after(o.getStartTime())){
+      return 1;
+    }else{
+      return this.getCaller().compareTo(o.getCaller());
+    }
   }
 }

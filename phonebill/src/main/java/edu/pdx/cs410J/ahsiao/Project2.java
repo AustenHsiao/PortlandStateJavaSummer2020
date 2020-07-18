@@ -19,7 +19,7 @@ public class Project2 {
     }
 
     public static void main(String[] args) {
-        int length = args.length;
+   /*     int length = args.length;
 
         if(length == 0){
             System.err.println("Missing command line arguments");
@@ -133,6 +133,6 @@ public class Project2 {
         if(printSpecified != 0){
             System.out.println(newCall.toString()); // only prints out the new call.
         }
-        System.exit(0);
+        System.exit(0);*/
     }
 }
