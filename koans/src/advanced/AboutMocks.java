@@ -22,13 +22,7 @@ public class AboutMocks {
         public ClassUnderTest() {
             // default is to pass a broken Collaborator, test should pass one
             // that doesn't throw exception
-            //this(new ExplosiveCollaborator());
-
-            this(new Collaborator(){
-                public void doBusinessStuff(){
-                    System.out.println("Safe anonymous class passed in.");
-                }
-            });
+            this(new ExplosiveCollaborator());
         }
 
         public ClassUnderTest(Collaborator c) {
@@ -46,7 +40,15 @@ public class AboutMocks {
         // HINT: pass a safe Collaborator implementation to constructor
         // new ClassUnderTest(new Collaborator(){... it should not be the
         // objective of this test to test that collaborator, so replace it
-        new ClassUnderTest().doSomething();
+        // edit: new ClassUnderTest().doSomething();
+
+        Collaborator NonExplosiveCollaborator = new Collaborator() {
+            public void doBusinessStuff() {
+                System.out.println("This one doesn't explode");
+            }
+        };
+
+        new ClassUnderTest(NonExplosiveCollaborator).doSomething();
     }
 
 }
