@@ -1,7 +1,4 @@
 package edu.pdx.cs410J.ahsiao;
-
-import org.w3c.dom.Text;
-
 import java.io.FileWriter;
 import java.io.IOException;
 

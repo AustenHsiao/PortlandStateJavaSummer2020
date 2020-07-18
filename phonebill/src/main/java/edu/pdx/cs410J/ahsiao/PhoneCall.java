@@ -93,6 +93,10 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
     return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(getEndTime());
   }
 
+  /**
+   * Returns the start time in a Date object
+   * @return
+   */
   @Override
   public Date getStartTime() {
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
@@ -110,6 +114,10 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
     }
   }
 
+  /**
+   * Returns the end time in a Date object
+   * @return
+   */
   @Override
   public Date getEndTime() {
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
@@ -127,6 +135,11 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
     }
   }
 
+  /**
+   * Denotes natural ordering (start time is highest priority, followed by caller number)
+   * @param o, phonecall to compare
+   * @return int (denoting higher- positive or lower- negative)
+   */
   @Override
   public int compareTo(PhoneCall o) {
     if(this.getStartTime().before(o.getStartTime())){

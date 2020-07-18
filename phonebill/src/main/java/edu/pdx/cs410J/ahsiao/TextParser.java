@@ -126,16 +126,33 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
             // 7, 10 - dates
             // 8, 11 - times
 
+            // DISREGARD ABOVE FOR PROJECT 3:
+            // for p3, format = "Phone call from 111-111-1111 to 222-222-2222 from 1/5/20, 3:00 PM to 1/5/20, 4:15 PM"
+            // 3, 5 - phone numbers
+            // 7, 11 - dates (remove comma)
+            // 8, 12 - times
+            // 9, 13 - AM/PM denotation
+
             // Since there are parsing functions for numbers, times, and dates statically declared in
             // the project1 class, I'm going to reuse those.
             String[] currentLine = fileRead.get(lineIndex).split(" ");
-            if(!Project1.validPhoneNumber(currentLine[3]) || !Project1.validPhoneNumber(currentLine[5]) ||
-                    !Project1.validTime(currentLine[8]) || !Project1.validTime(currentLine[11]) ||
-                    !Project1.validDate(currentLine[7]) || !Project1.validDate(currentLine[10])){
-                throw new ParserException("Invalid formatting.");
+            if(currentLine.length != 14){
+                throw new ParserException("currentLine read invalid");
             }
-            //PhoneCall tempPhoneCall = new PhoneCall(currentLine[3], currentLine[5], currentLine[7], currentLine[8], currentLine[10], currentLine[11]);
-            //tempPhoneBill.addPhoneCall(tempPhoneCall);
+            String caller = currentLine[3];
+            String callee = currentLine[5];
+            StringBuilder startDate = new StringBuilder(currentLine[7]);
+            StringBuilder endDate = new StringBuilder(currentLine[11]);
+            String startTime = currentLine[8];
+            String endTime = currentLine[12];
+            String startTimeAMPM = currentLine[9];
+            String endTimeAMPM = currentLine[13];
+
+            startDate.deleteCharAt(startDate.length() - 1);
+            endDate.deleteCharAt(endDate.length() - 1);
+
+            PhoneCall tempPhoneCall = new PhoneCall(currentLine[3], currentLine[5], currentLine[7], currentLine[8], currentLine[9], currentLine[11], currentLine[12], currentLine[13]);
+            tempPhoneBill.addPhoneCall(tempPhoneCall);
         }
         return tempPhoneBill;
     }
