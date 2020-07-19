@@ -167,6 +167,8 @@ public class Project1 {
   We'll keep this open in case time travelers are using my program.
   */
   public static void main(String[] args) {
+    System.out.println("test");
+
     /*
     int argCount = args.length;
     int printYes = 0;

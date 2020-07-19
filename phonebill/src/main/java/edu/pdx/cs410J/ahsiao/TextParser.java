@@ -79,6 +79,7 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
             // read each line in the file and add it to the arraylist
             fileRead.add(line);
         }
+        inputStream.close();
     }
 
     /**

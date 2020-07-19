@@ -9,7 +9,7 @@ public class Project3 {
      * @param date
      * @return
      */
-    private static String TwoDigitDate(String date){
+    public static String TwoDigitDate(String date){
         if(date.length() == 10){return date;}
         String MM = "";
         String dd = "";
@@ -18,6 +18,7 @@ public class Project3 {
         if(splitDate[1].length() == 1){dd = "0";}
         return MM + splitDate[0] + '/' + dd + splitDate[1] + '/' + splitDate[2];
     }
+
 
     public static void main(String[] args){
 

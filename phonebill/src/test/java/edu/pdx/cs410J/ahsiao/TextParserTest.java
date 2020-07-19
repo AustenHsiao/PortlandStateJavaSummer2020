@@ -3,6 +3,7 @@ package edu.pdx.cs410J.ahsiao;
 import edu.pdx.cs410J.ParserException;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -25,11 +26,14 @@ public class TextParserTest {
             FileWriter malformedField = new FileWriter("formatTest.txt");
             malformedField.write("This is a random string that makes this text file incorrectly formatted.");
             malformedField.flush();
+            malformedField.close();
         }catch(IOException e){
             System.out.println("This test has failed due to IOException");
         }
         TextParser test = new TextParser("commandLineNameExample");
         assertNull(test.read("formatTest.txt"));
+        File a = new File("formatTest.txt");
+        a.delete();
     }
 
     @Test
@@ -38,8 +42,9 @@ public class TextParserTest {
             FileWriter file = new FileWriter("BobFile1.txt");
             file.write("BILL FOR: Bob\n");
             file.flush();
-            file.write("Phone call from 503-111-1111 to 503-222-2222 from 01/11/2020 13:00 to 1/11/2020 13:09\n");
+            file.write("Phone call from 503-111-1111 to 503-222-2222 from 01/11/2020 11:00 AM to 1/11/2020 1:09 AM\n");
             file.flush();
+            file.close();
         }catch(IOException e){
             System.out.println("This test has failed due to IOException");
         }
@@ -47,6 +52,8 @@ public class TextParserTest {
         PhoneBill bobPhoneBill = test.read("BobFile1.txt");
         assertEquals(bobPhoneBill.getCustomer(), "Bob");
         assertEquals(bobPhoneBill.getPhoneCalls().size(), 1);
+        File closefile = new File("BobFile1.txt");
+        closefile.delete();
     }
 
     @Test
@@ -54,11 +61,15 @@ public class TextParserTest {
         // Trying to read in a phone bill from an empty file should not create a new phone bill
         try {
             FileWriter empty = new FileWriter("Empty.txt");
+            TextParser test = new TextParser("Bob");
+            assertNull(test.read("Empty.txt"));
+            empty.close();
+            File a = new File("Empty.txt");
+            a.delete();
         }catch(IOException e){
             System.out.println("This test has failed due to IOException");
         }
-        TextParser test = new TextParser("Bob");
-        assertNull(test.read("Empty.txt"));
+
     }
 
     @Test
@@ -70,11 +81,14 @@ public class TextParserTest {
             malformedField.flush();
             malformedField.write("Phone call from 503-1a1-1111 to 503-222-2222 from 01/11/2020 13:00 to 1/11/2020 13:09\n");
             malformedField.flush();
+            malformedField.close();
         }catch(IOException e){
             System.out.println("This test has failed due to IOException");
         }
         TextParser test = new TextParser("Bob");
         assertNull(test.read("malformedField.txt"));
+        File a = new File("malformedField.txt");
+        a.delete();
     }
 
 }

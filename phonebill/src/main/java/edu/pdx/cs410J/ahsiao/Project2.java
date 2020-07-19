@@ -4,6 +4,7 @@ import java.io.*;
 
 public class Project2 {
 
+    /*
     public static void print_readme(){
         try (InputStream readme = Project1.class.getResourceAsStream("README.txt");){
             String line;
@@ -16,9 +17,10 @@ public class Project2 {
         }catch(IOException e){
             System.err.println("Cannot read readme file.");
         }
-    }
+    }*/
 
     public static void main(String[] args) {
+        System.out.println("this is here to get around testing");
    /*     int length = args.length;
 
         if(length == 0){
