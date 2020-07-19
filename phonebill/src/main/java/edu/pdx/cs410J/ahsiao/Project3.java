@@ -110,6 +110,7 @@ public class Project3 {
             System.exit(5);
         }
 
+        // Once we've looked at the options, now we should determine if there are sufficient number of arguments (need 9)
         int start = pretty + file + print;
         if(args.length - start > 9){
             System.err.println("Too many arguments");
@@ -131,6 +132,7 @@ public class Project3 {
         String prettyFileName = args[prettyFileIndex];
         String textFileName = args[textFileIndex];
 
+        // Check validity of all arguments
         if(!startAMPM.equalsIgnoreCase("AM") && !startAMPM.equalsIgnoreCase("PM")){
             System.err.println("Incorrect start time. Time should be designated with <am/pm>");
             System.exit(8);
@@ -148,6 +150,8 @@ public class Project3 {
             System.exit(12);
         }
 
+        // once the phonecall is created, we can use the getEnd- and getStartTime() methods to return a date. Then by
+        // using the before and after methods included in the API, we can easily determine if a date occurs before/after another.
         PhoneCall userCall = new PhoneCall(callerNumber, calleeNumber, startDate, startTime, startAMPM, endDate, endTime, endAMPM);
         if(userCall.getEndTime().before(userCall.getStartTime())){
             System.err.println("End time occurs before start time");
@@ -156,6 +160,7 @@ public class Project3 {
 
         PhoneBill userBill;
 
+        // if -textFile flag is specified
         if(file != 0){
             TextParser tp = new TextParser(customer);
             if( (userBill = tp.read(textFileName)) == null ){
@@ -168,13 +173,17 @@ public class Project3 {
             userBill = new PhoneBill(customer, userCall);
         }
 
+        // if -pretty specified
         if(pretty != 0){
             PrettyPrinter.writeToFile(prettyFileName, userBill);
         }
 
+        // if -print specified
         if(print != 0){
             System.out.println(userCall.toString());
         }
+
+        // normal function will result in exit code 15.
         System.exit(15);
     }
 

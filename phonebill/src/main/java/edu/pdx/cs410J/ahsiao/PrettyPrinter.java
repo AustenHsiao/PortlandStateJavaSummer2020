@@ -11,10 +11,22 @@ import java.util.Collection;
 public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
     String filename;
 
+    /**
+     * PrettyPrinter constructor requires a filename. Note that the filename could be "-"
+     * @param prettyFileName
+     */
     PrettyPrinter(String prettyFileName){
         filename = prettyFileName;
     }
 
+    /**
+     * WriteToFile is the static method by which the user can dump a pretty print.
+     * By specifying "-", the method will invoke dump which will pretty print out the phonebill.
+     * By specifying a filename, the method will invoke dump and pretty print to a file.
+     * @param prettyFileName
+     * @param phoneBill
+     * @return
+     */
     public static int writeToFile(String prettyFileName, PhoneBill phoneBill){
         try {
             PrettyPrinter temp = new PrettyPrinter(prettyFileName);
@@ -26,6 +38,12 @@ public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
         }
     }
 
+    /**
+     * Dump will use the Collection returned by phonebill's getPhoneCalls() method and sort all by the natural ordering.
+     * Then depending on the file name, will either print out or write to file.
+     * @param phoneBill
+     * @throws IOException
+     */
     @Override
     public void dump(PhoneBill phoneBill) throws IOException {
         Collection<PhoneCall> temp = phoneBill.getPhoneCalls();
@@ -42,7 +60,7 @@ public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
                 System.out.print("Call from " + callLine.getCaller() + " to " + callLine.getCallee() + "\n");
                 System.out.print("Call start time: " + DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(callLine.getStartTime()) + "\n");
                 System.out.print("Call end time: " + DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(callLine.getEndTime()) + "\n");
-                System.out.print("Call duration: " + duration_minutes + "\n\n");
+                System.out.print("Call duration: " + duration_minutes + " minutes\n\n");
             }
         }else{
             // pretty save to file
@@ -59,7 +77,7 @@ public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
                 fw.flush();
                 fw.write("Call end time: " + DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(callLine.getEndTime()) + "\n");
                 fw.flush();
-                fw.write("Call duration (mins): " + duration_minutes + "\n\n");
+                fw.write("Call duration: " + duration_minutes + " minutes\n\n");
                 fw.flush();
             }
             fw.close();
