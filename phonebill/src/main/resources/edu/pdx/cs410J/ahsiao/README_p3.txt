@@ -9,9 +9,9 @@ This program is used to:
         and/or
     (3) Add a phone call to a user's phone bill
 
-usage: java edu.pdx.cs410J.ahsiao.Project2 [options] <args>
+usage: java edu.pdx.cs410J.ahsiao.Project3 [options] <args>
     args are (in this order):
-        customer               Person whose phone bill we’re modeling
+        customer               Person whose phone bill we are modeling
         callerNumber           Phone number of caller
         calleeNumber           Phone number of person who was called
         start                  Date and time (am/pm) call began
