@@ -3,6 +3,7 @@ import edu.pdx.cs410J.PhoneBillDumper;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -32,11 +33,12 @@ public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
         phoneCall_Collection.sort(null);
 
         // pretty print
-        if(filename == "-"){
+        if(filename.equals("-")){
             for(PhoneCall callLine: phoneCall_Collection){
                 // Duration is the final time - end time.
                 Long duration = callLine.getEndTime().getTime() - callLine.getStartTime().getTime();
                 int duration_minutes = (int)(duration / 6e+4);
+
                 System.out.print("Call from " + callLine.getCaller() + " to " + callLine.getCallee() + "\n");
                 System.out.print("Call start time: " + DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(callLine.getStartTime()) + "\n");
                 System.out.print("Call end time: " + DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(callLine.getEndTime()) + "\n");

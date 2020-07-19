@@ -130,7 +130,7 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
             // DISREGARD ABOVE FOR PROJECT 3:
             // for p3, format = "Phone call from 111-111-1111 to 222-222-2222 from 1/5/20, 3:00 PM to 1/5/20, 4:15 PM"
             // 3, 5 - phone numbers
-            // 7, 11 - dates (remove comma)
+            // 7, 11 - dates
             // 8, 12 - times
             // 9, 13 - AM/PM denotation
 
@@ -142,17 +142,14 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser<PhoneBill>{
             }
             String caller = currentLine[3];
             String callee = currentLine[5];
-            StringBuilder startDate = new StringBuilder(currentLine[7]);
-            StringBuilder endDate = new StringBuilder(currentLine[11]);
+            String startDate = Project3.TwoDigitDate(currentLine[7].split(",")[0]);
+            String endDate = Project3.TwoDigitDate(currentLine[11].split(",")[0]);
             String startTime = currentLine[8];
             String endTime = currentLine[12];
             String startTimeAMPM = currentLine[9];
             String endTimeAMPM = currentLine[13];
 
-            startDate.deleteCharAt(startDate.length() - 1);
-            endDate.deleteCharAt(endDate.length() - 1);
-
-            PhoneCall tempPhoneCall = new PhoneCall(currentLine[3], currentLine[5], currentLine[7], currentLine[8], currentLine[9], currentLine[11], currentLine[12], currentLine[13]);
+            PhoneCall tempPhoneCall = new PhoneCall(caller, callee, startDate, startTime, startTimeAMPM, endDate, endTime, endTimeAMPM);
             tempPhoneBill.addPhoneCall(tempPhoneCall);
         }
         return tempPhoneBill;

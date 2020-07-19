@@ -186,7 +186,8 @@ public class Project3IT extends InvokeMainTestCase{
     public void NamesDoMatch(){
         try {
             FileWriter fw = new FileWriter("testfile.txt");
-            fw.write("BILL FOR: Bob\n");
+            fw.write("BILL FOR: Bob");
+            fw.write('\n');
             fw.write("Phone call from 111-111-1111 to 222-222-2222 from 1/5/20, 3:00 PM to 1/5/20, 4:15 PM");
             fw.close();
 

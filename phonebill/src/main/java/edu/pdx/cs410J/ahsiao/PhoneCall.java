@@ -135,7 +135,8 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
   }
 
   /**
-   * Denotes natural ordering (start time is highest priority, followed by caller number)
+   * Denotes natural ordering (start time is highest priority, followed by caller number).
+   * More recent phone calls will appear at higher indices.
    * @param o, phonecall to compare
    * @return int (denoting higher- positive or lower- negative)
    */
