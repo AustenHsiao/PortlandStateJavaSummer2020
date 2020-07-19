@@ -79,6 +79,7 @@ public class Project3 {
             for(String word: args){
                 if(word.equals("-README")){
                     printReadme();
+                    System.exit(-1);
                 }
             }
             System.err.println("Missing command line arguments");
@@ -96,7 +97,7 @@ public class Project3 {
                 }else if(args[i].equals("-README")){
                     printReadme();
                     System.exit(3);
-                }else if(args[i].charAt(0) == '-' && pretty == 0){
+                }else if(args[i].charAt(0) == '-' && args[i].length() != 1){
                     System.err.println("Unrecognized option(s)");
                     System.exit(4);
                 }
@@ -108,30 +109,30 @@ public class Project3 {
 
         int start = pretty + file + print;
         if(args.length - start > 9){
-            System.err.println("Too many command line arguments");
+            System.err.println("Too many arguments");
             System.exit(6);
         }else if(args.length - start < 9){
-            System.err.println("Missing command line arguments");
+            System.err.println("Missing arguments");
             System.exit(7);
         }
 
         String customer = args[start];
         String callerNumber = args[1 + start];
         String calleeNumber = args[2 + start];
-        String startDate = args[3 + start];
+        String startDate = TwoDigitDate(args[3 + start]);
         String startTime = args[4 + start];
         String startAMPM = args[5 + start];
-        String endDate = args[6 + start];
+        String endDate = TwoDigitDate(args[6 + start]);
         String endTime = args[7 + start];
         String endAMPM = args[8 + start];
         String prettyFileName = args[prettyFileIndex];
         String textFileName = args[textFileIndex];
 
-        if(!startAMPM.equalsIgnoreCase("AM") || !startAMPM.equalsIgnoreCase("PM")){
-            System.err.println("Incorrect start time. Use format HH:mm <am/pm>");
+        if(!startAMPM.equalsIgnoreCase("AM") && !startAMPM.equalsIgnoreCase("PM")){
+            System.err.println("Incorrect start time. Time should be designated with <am/pm>");
             System.exit(8);
-        }else if(!endAMPM.equalsIgnoreCase("AM") || !endAMPM.equalsIgnoreCase("PM")){
-            System.err.println("Incorrect end time. Use format HH:mm <am/pm>");
+        }else if(!endAMPM.equalsIgnoreCase("AM") && !endAMPM.equalsIgnoreCase("PM")){
+            System.err.println("Incorrect end time. Time should be designated with <am/pm>");
             System.exit(9);
         }else if(!Project1.validPhoneNumber(callerNumber) || !Project1.validPhoneNumber(calleeNumber)){
             System.err.println("Invalid number(s)");
@@ -140,7 +141,7 @@ public class Project3 {
             System.err.println("Invalid date(s)");
             System.exit(11);
         }else if(!Project3.validTime(startTime) || !Project3.validTime(endTime)){
-            System.err.println("Invalid Time(s)");
+            System.err.println("Invalid time(s)");
             System.exit(12);
         }
 
@@ -169,9 +170,9 @@ public class Project3 {
         }
 
         if(print != 0){
-            userCall.toString();
+            System.out.println(userCall.toString());
         }
-
+        System.exit(15);
     }
 
 }
