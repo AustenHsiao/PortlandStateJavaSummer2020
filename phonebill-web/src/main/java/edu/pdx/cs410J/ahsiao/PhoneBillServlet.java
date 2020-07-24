@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * This servlet ultimately provides a REST API for working with an
@@ -19,10 +22,141 @@ import java.util.Map;
  */
 public class PhoneBillServlet extends HttpServlet
 {
+    /* The following functions are copy and pasted from previous projects.
+
+     */
+    /**
+     * Tests if a string is a valid phone number in the form xxx-xxx-xxxx
+     * where x is [0-9]. Length of string should be 12 (10 digits and 2 hyphens).
+     * This function splits up the string by hyphens and tests if each section is comprised of
+     * only digits. Returns true if the parameter is a valid phone number.
+     * @param phonenum
+     */
+    private boolean validPhoneNumber(String phonenum){
+        if(phonenum.length() != 12){return false;}
+        String[] splitNumber = phonenum.split("-");
+        if(splitNumber.length != 3){return false;}
+        for(String numberSections: splitNumber){
+            if(!numberSections.matches("[0-9]+")){
+                return false;
+            }
+        }
+        if(splitNumber[0].length() != 3 || splitNumber[1].length() != 3){
+            return false;
+        }
+        if(splitNumber[2].length() != 4){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Takes in a string and returns a boolean value representing whether or not it can be a valid date with
+     * the form mm/dd/yyyy. Months and dates with leading 0s are accepted. Leap years not accounted for.
+     * @param date
+     * @return
+     */
+    private boolean validDate(String date){
+        // At a minimum, the date can be represented as x/x/xxxx, which is 8 chars
+        // On the flip side, the maximum is 10 chars
+        if(date.length() < 8 || date.length() > 10){return false;}
+        String[] splitDate = date.split("/");
+
+        // If we don't end up with 3 portions, we weren't given a valid date for sure
+        if(splitDate.length != 3){return false;}
+
+        // After splitting, check each section, at a maximum, the string should be 4 characters in length
+        // and contains only numbers
+        for(String dateSections: splitDate) {
+            if (!dateSections.matches("[0-9]+")) {
+                return false;
+            }
+        }
+        // Check lengths, for the first two sections, we can have either a single digit or two digits
+        if(splitDate[0].length() > 2){return false;}
+        if(splitDate[1].length() > 2){return false;}
+        if(splitDate[2].length() != 4){return false;}
+
+        int month = parseInt(splitDate[0]);
+        int day = parseInt(splitDate[1]);
+        int year = parseInt(splitDate[2]);
+
+        if(month < 1 || month > 12){return false;}
+        if(day < 1 || day > 31){return false;}
+        // Arbitrarily assign 2000 to be the earliest acceptable year. The upper limit is constrained to 4 digits
+        if(year < 2000){return false;}
+
+        // All the months that CANNOT have 31 days.
+        if((month == 2 ||
+                month == 4 ||
+                month == 6 ||
+                month == 9 ||
+                month == 11) && day == 31){return false;}
+
+        // If it passed through all the filters, it might be true
+        return true;
+    }
+
+    /**
+     * Takes in a string and verifies that the form fits the 24-hour clock format.
+     * Returns boolean value. A valid time can exist between 4 and 5 characters (1:01 vs 01:01).
+     * Much like the phone number parser, this function splits the time by a colon. To ensure that
+     * there even was a colon to begin with, the length of the newly split string should be 2.
+     * Each sections should contain only numbers and have a maximum of 2 digits. Within each section
+     * the numbers should also makes sense-- eg: the hours in a day are bounded by [0,24] and minutes [0,60)
+     * @param time
+     * @return
+     */
+    private boolean validTime(String time){
+        if(time.length() < 4 || time.length() > 5){return false;}
+        String[] splitTime = time.split(":");
+        if(splitTime.length != 2){return false;}
+        for(String timeSections: splitTime){
+            if(!timeSections.matches("[0-9]+") || timeSections.length() > 2){
+                return false;
+            }
+        }
+        if(splitTime[1].length() != 2){return false;}
+        int hour = parseInt(splitTime[0]);
+        int minute = parseInt(splitTime[1]);
+
+        if(hour > 24 || hour < 0){return false;}
+        if(minute > 59 || minute < 0){return false;}
+
+        return true;
+    }
+
+    /**
+     * The passed in string is assumed to be valid in the form (mm/dd/yyyy) where
+     * leading 0s are optional-- it is acceptable to have (m/d/yyyy). This function
+     * returns the form (mm/dd/yyyy). If the year is expressed with 2 digits (MM/dd/yy),
+     * append a 20 in front of the year.
+     * @param date
+     * @return
+     */
+    private String TwoDigitDate(String date){
+        if(date.length() == 10){return date;}
+        String MM = "";
+        String dd = "";
+        String yyyy = "";
+        String[] splitDate = date.split("/");
+        if(splitDate[0].length() == 1){MM = "0";}
+        if(splitDate[1].length() == 1){dd = "0";}
+        if(splitDate[2].length() == 2){yyyy = "20";}
+        return MM + splitDate[0] + '/' + dd + splitDate[1] + '/' + yyyy + splitDate[2];
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                               //
+    // Denotes the end of copy-and-pasted methods (from previous assignments.                                        //
+    //                                                                                                               //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     static final String WORD_PARAMETER = "word";
     static final String DEFINITION_PARAMETER = "definition";
 
-    private final Map<String, String> dictionary = new HashMap<>();
+    private final Map<String, PhoneBill> dictionary = new HashMap<>();
 
     /**
      * Handles an HTTP GET request from a client by writing the definition of the
@@ -60,17 +194,79 @@ public class PhoneBillServlet extends HttpServlet
             return;
         }
 
-        String definition = getParameter(DEFINITION_PARAMETER, request );
-        if ( definition == null) {
-            missingRequiredParameter( response, DEFINITION_PARAMETER );
-            return;
+        PhoneBill phonebill;
+        if(!this.dictionary.containsKey(word)) {
+            phonebill = new PhoneBill(word);
+        }else{
+            phonebill = this.dictionary.get(word);
         }
 
-        this.dictionary.put(word, definition);
+        String definition = getParameter(DEFINITION_PARAMETER, request );
+
+        if ( definition == null) {
+            // Missing definition
+            missingRequiredParameter( response, "Customer Name" );
+            response.setStatus( HttpServletResponse.SC_PRECONDITION_FAILED);
+            return;
+        }else if(definition.split(" ").length != 8){
+            String[] arguments = definition.split(" ");
+
+            try {
+                String curr_argument;
+
+                for(int i = 0; i < 8; ++i){
+                    curr_argument = arguments[i];
+                }
+
+                missingRequiredParameter(response, "too many parameters");
+                return;
+            }catch(ArrayIndexOutOfBoundsException e){
+                missingRequiredParameter(response, "missing parameters: callerNumber calleeNumber StartDate EndDate");
+                return;
+            }
+        }else{
+            // Definition matches
+            String[] arguments = definition.split(" ");
+            String callerNumber = arguments[0];
+            String calleeNumber = arguments[1];
+            String startDate = arguments[2];
+            String startTime = arguments[3];
+            String startAM_PM = arguments[4];
+            String endDate = arguments[5];
+            String endTime = arguments[6];
+            String endAM_PM = arguments[7];
+
+            if(!validPhoneNumber(callerNumber) || !validPhoneNumber(calleeNumber)){
+                missingRequiredParameter( response, "malformed caller or callee phone number" );
+            }else if(!validDate(startDate) || !validDate(endDate)){
+                missingRequiredParameter( response, "malformed start or end date" );
+            }else if(!validTime(startTime) || !validTime(endTime)){
+                missingRequiredParameter( response, "malformed start or end time" );
+            }else if(!startAM_PM.equalsIgnoreCase("AM") && !startAM_PM.equalsIgnoreCase("PM")){
+                missingRequiredParameter( response, "start time am or pm denotation" );
+            }else if(!endAM_PM.equalsIgnoreCase("AM") && !endAM_PM.equalsIgnoreCase("PM")){
+                missingRequiredParameter( response, "end time am or pm denotation" );
+            }
+
+            PhoneCall validCall = new PhoneCall(callerNumber, calleeNumber, startDate, startTime, startAM_PM, endDate, endTime, endAM_PM);
+            if(validCall.getEndTime().before(validCall.getStartTime())){
+                response.setStatus( HttpServletResponse.SC_PRECONDITION_FAILED);
+                return;
+            }
+            phonebill.addPhoneCall(validCall);
+        }
+
+        this.dictionary.put(word, phonebill);
 
         PrintWriter pw = response.getWriter();
-        pw.println(Messages.definedWordAs(word, definition));
+
+        Collection<PhoneCall> calls = phonebill.getPhoneCalls();
+        pw.println(phonebill.getCustomer() + ":");
         pw.flush();
+        for(PhoneCall call: calls){
+            pw.println("\t" + call.toString());
+            pw.flush();
+        }
 
         response.setStatus( HttpServletResponse.SC_OK);
     }
@@ -112,17 +308,19 @@ public class PhoneBillServlet extends HttpServlet
      * The text of the message is formatted with
      * {@link Messages#formatDictionaryEntry(String, String)}
      */
-    private void writeDefinition(String word, HttpServletResponse response) throws IOException {
-        String definition = this.dictionary.get(word);
+    private void writeDefinition(String name, HttpServletResponse response) throws IOException {
+        Collection<PhoneCall> definition = this.dictionary.get(name).getPhoneCalls();
 
         if (definition == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 
         } else {
             PrintWriter pw = response.getWriter();
-            pw.println(Messages.formatDictionaryEntry(word, definition));
-
-            pw.flush();
+            pw.println(this.dictionary.get(name).getCustomer() + ":");
+            for(PhoneCall i: definition) {
+                pw.println("\t" + Messages.formatDictionaryEntry(name, i.toString()));
+                pw.flush();
+            }
 
             response.setStatus(HttpServletResponse.SC_OK);
         }
@@ -137,9 +335,20 @@ public class PhoneBillServlet extends HttpServlet
     private void writeAllDictionaryEntries(HttpServletResponse response ) throws IOException
     {
         PrintWriter pw = response.getWriter();
-        Messages.formatDictionaryEntries(pw, dictionary);
 
-        pw.flush();
+        for(PhoneBill name: dictionary.values()){
+            pw.println(name.getCustomer() + ":");
+            pw.flush();
+            Collection<PhoneCall> dict = name.getPhoneCalls();
+            for(PhoneCall i: dict){
+                pw.println("\t" + i.toString());
+                pw.flush();
+            }
+        }
+
+        //Messages.formatDictionaryEntries(pw, dictionary);
+
+        //pw.flush();
 
         response.setStatus( HttpServletResponse.SC_OK );
     }
@@ -161,7 +370,7 @@ public class PhoneBillServlet extends HttpServlet
     }
 
     @VisibleForTesting
-    String getDefinition(String word) {
+    PhoneBill getDefinition(String word) {
         return this.dictionary.get(word);
     }
 

@@ -39,6 +39,7 @@ public class PhoneBillRestClientIT {
     assertThat(dictionary.size(), equalTo(0));
   }
 
+  /*
   @Test
   public void test2DefineOneWord() throws IOException {
     PhoneBillRestClient client = newPhoneBillRestClient();
@@ -48,7 +49,7 @@ public class PhoneBillRestClientIT {
 
     String definition = client.getDefinition(testWord);
     assertThat(definition, equalTo(testDefinition));
-  }
+  }*/
 
   @Test
   public void test4MissingRequiredParameterReturnsPreconditionFailed() throws IOException {
