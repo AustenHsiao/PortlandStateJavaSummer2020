@@ -238,18 +238,24 @@ public class PhoneBillServlet extends HttpServlet
 
             if(!validPhoneNumber(callerNumber) || !validPhoneNumber(calleeNumber)){
                 missingRequiredParameter( response, "malformed caller or callee phone number" );
+                return;
             }else if(!validDate(startDate) || !validDate(endDate)){
                 missingRequiredParameter( response, "malformed start or end date" );
+                return;
             }else if(!validTime(startTime) || !validTime(endTime)){
                 missingRequiredParameter( response, "malformed start or end time" );
+                return;
             }else if(!startAM_PM.equalsIgnoreCase("AM") && !startAM_PM.equalsIgnoreCase("PM")){
                 missingRequiredParameter( response, "start time am or pm denotation" );
+                return;
             }else if(!endAM_PM.equalsIgnoreCase("AM") && !endAM_PM.equalsIgnoreCase("PM")){
                 missingRequiredParameter( response, "end time am or pm denotation" );
+                return;
             }
 
             PhoneCall validCall = new PhoneCall(callerNumber, calleeNumber, startDate, startTime, startAM_PM, endDate, endTime, endAM_PM);
             if(validCall.getEndTime().before(validCall.getStartTime())){
+                missingRequiredParameter( response, "end time occurs before start time." );
                 response.setStatus( HttpServletResponse.SC_PRECONDITION_FAILED);
                 return;
             }
