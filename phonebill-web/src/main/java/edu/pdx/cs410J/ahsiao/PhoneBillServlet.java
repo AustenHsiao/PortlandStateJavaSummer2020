@@ -1,6 +1,7 @@
 package edu.pdx.cs410J.ahsiao;
 
 import com.google.common.annotations.VisibleForTesting;
+import org.w3c.dom.Text;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,9 +24,7 @@ import static java.lang.Integer.parseInt;
  */
 public class PhoneBillServlet extends HttpServlet
 {
-    /* The following functions are copy and pasted from previous projects.
 
-     */
     /**
      * Tests if a string is a valid phone number in the form xxx-xxx-xxxx
      * where x is [0-9]. Length of string should be 12 (10 digits and 2 hyphens).
@@ -146,15 +146,10 @@ public class PhoneBillServlet extends HttpServlet
         return MM + splitDate[0] + '/' + dd + splitDate[1] + '/' + yyyy + splitDate[2];
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                               //
-    // Denotes the end of copy-and-pasted methods (from previous assignments.                                        //
-    //                                                                                                               //
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    static final String WORD_PARAMETER = "word";
+    static final String WORD_PARAMETER = "customer";
     static final String DEFINITION_PARAMETER = "definition";
+    static final String START_BOUND = "start";
+    static final String END_BOUND = "end";
 
     private final Map<String, PhoneBill> dictionary = new HashMap<>();
 
@@ -167,13 +162,59 @@ public class PhoneBillServlet extends HttpServlet
     @Override
     protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
+        PrintWriter pw = response.getWriter();
         response.setContentType( "text/plain" );
 
         String word = getParameter( WORD_PARAMETER, request );
-        if (word != null) {
-            writeDefinition(word, response);
+        String start = getParameter(START_BOUND, request);
+        String end = getParameter(END_BOUND, request);
+        String newStartDate;
+        String newEndDate;
 
-        } else {
+        if (word != null && start == null && end == null) {
+            writeDefinition(word, response);
+        }else if (word != null && start != null && end != null){
+            String[] startString = start.split(" ");
+            String[] endString = end.split(" ");
+
+            if(validDate(startString[0])){
+                newStartDate = TwoDigitDate(startString[0]);
+            }else{
+                pw.println("Malformed start date");
+                return;
+            }
+            if(validDate(endString[0])){
+                newEndDate = TwoDigitDate(endString[0]);
+            }else{
+                pw.println("Malformed end date");
+                return;
+            }
+
+            if(!validTime(startString[1]) || !validTime(endString[1])){
+                pw.println("Malformed time(s)");
+                return;
+            }
+
+            if(!startString[2].equalsIgnoreCase("AM") && !startString[2].equalsIgnoreCase("PM")){
+                pw.println("Start time am/pm not denoted correctly");
+                return;
+            }else if(!endString[2].equalsIgnoreCase("AM") && !endString[2].equalsIgnoreCase("PM")){
+                pw.println("End time am/pm not denoted correctly");
+                return;
+            }
+
+            // Reference call is only used for its time.
+            PhoneCall referenceCall = new PhoneCall("111-111-1111", "222-222-2222", newStartDate, startString[1], startString[2], newEndDate, endString[1], endString[2]);
+            if(referenceCall.getEndTime().before(referenceCall.getStartTime())){
+                missingRequiredParameter( response, "end time occurs before start time." );
+                response.setStatus( HttpServletResponse.SC_PRECONDITION_FAILED);
+                return;
+            }
+
+            writeDefinition(word, response, referenceCall.getStartTime(), referenceCall.getEndTime());
+        }else if( (word != null && start != null && end == null) || (word != null && start == null && end != null)){
+            pw.println("Missing start or end time");
+        }else {
             writeAllDictionaryEntries(response);
         }
     }
@@ -221,7 +262,7 @@ public class PhoneBillServlet extends HttpServlet
                 missingRequiredParameter(response, "too many parameters");
                 return;
             }catch(ArrayIndexOutOfBoundsException e){
-                missingRequiredParameter(response, "missing parameters: callerNumber calleeNumber StartDate EndDate");
+                missingRequiredParameter(response, "missing parameters, format: callerNumber calleeNumber StartDate EndDate");
                 return;
             }
         }else{
@@ -309,25 +350,29 @@ public class PhoneBillServlet extends HttpServlet
     }
 
     /**
-     * Writes the definition of the given word to the HTTP response.
+     * Writes the phonecalls of the given customer's (word) phonebill to the HTTP response.
      *
-     * The text of the message is formatted with
-     * {@link Messages#formatDictionaryEntry(String, String)}
      */
     private void writeDefinition(String name, HttpServletResponse response) throws IOException {
-        Collection<PhoneCall> definition = this.dictionary.get(name).getPhoneCalls();
+        PrintWriter pw = response.getWriter();
 
-        if (definition == null) {
+        if( !this.dictionary.containsKey(name)){
+            pw.println("No entry found");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-
         } else {
-            PrintWriter pw = response.getWriter();
-            pw.println(this.dictionary.get(name).getCustomer() + ":");
-            for(PhoneCall i: definition) {
-                pw.println("\t" + Messages.formatDictionaryEntry(name, i.toString()));
-                pw.flush();
-            }
+            TextDumper.write(pw, this.dictionary.get(name));
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
+    }
 
+    private void writeDefinition(String name, HttpServletResponse response, Date start, Date end) throws IOException {
+        PrintWriter pw = response.getWriter();
+
+        if( !this.dictionary.containsKey(name)){
+            pw.println("No entry found");
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            TextDumper.write(pw, this.dictionary.get(name), start, end);
             response.setStatus(HttpServletResponse.SC_OK);
         }
     }
@@ -342,20 +387,14 @@ public class PhoneBillServlet extends HttpServlet
     {
         PrintWriter pw = response.getWriter();
 
-        for(PhoneBill name: dictionary.values()){
-            pw.println(name.getCustomer() + ":");
+        if(this.dictionary.size() == 0){
+            pw.println("No phonebills to display");
             pw.flush();
-            Collection<PhoneCall> dict = name.getPhoneCalls();
-            for(PhoneCall i: dict){
-                pw.println("\t" + i.toString());
-                pw.flush();
+        }else {
+            for (PhoneBill name : dictionary.values()) {
+                TextDumper.write(pw, name);
             }
         }
-
-        //Messages.formatDictionaryEntries(pw, dictionary);
-
-        //pw.flush();
-
         response.setStatus( HttpServletResponse.SC_OK );
     }
 

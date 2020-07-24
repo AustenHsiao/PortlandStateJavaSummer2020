@@ -43,14 +43,14 @@ public class PhoneBillRestClient extends HttpRequestHelper
      * Returns the definition for the given word
      */
     public String getDefinition(String word) throws IOException {
-      Response response = get(this.url, Map.of("word", word));
+      Response response = get(this.url, Map.of("customer", word));
       throwExceptionIfNotOkayHttpStatus(response);
       String content = response.getContent();
       return Messages.parseDictionaryEntry(content).getValue();
     }
 
     public void addDictionaryEntry(String word, String definition) throws IOException {
-      Response response = postToMyURL(Map.of("word", word, "definition", definition));
+      Response response = postToMyURL(Map.of("customer", word, "definition", definition));
       throwExceptionIfNotOkayHttpStatus(response);
     }
 

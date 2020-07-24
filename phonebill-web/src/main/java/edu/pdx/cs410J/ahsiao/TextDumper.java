@@ -1,6 +1,9 @@
 package edu.pdx.cs410J.ahsiao;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.Date;
 
 public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper<PhoneBill>{
 
@@ -35,6 +38,22 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper<PhoneBill>{
     }
 
     /**
+     * used for calling the dumpWrite method which is used to print for web app
+     * @param pw
+     * @param phoneBill
+     * @return
+     */
+    public static void write(PrintWriter pw, PhoneBill phoneBill){
+        TextDumper temp = new TextDumper("");
+        temp.dumpWrite(pw, phoneBill, null, null);
+    }
+
+    public static void write(PrintWriter pw, PhoneBill phoneBill, Date start, Date end){
+        TextDumper temp = new TextDumper("");
+        temp.dumpWrite(pw, phoneBill, start, end);
+    }
+
+    /**
      * dump is the implementation of the abstract method from PhoneBillDumper.
      * This method takes in a PhoneBill to dump. Based on the customer name, a text
      * file is created and each PhoneCall in the object is written to the file using the
@@ -44,8 +63,6 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper<PhoneBill>{
      */
     @Override
     public void dump(PhoneBill phoneBill) throws IOException {
-
-
         FileWriter file = new FileWriter(dumpFileName);
         file.write("BILL FOR: " + phoneBill.getCustomer() + "\n");
         file.flush();
@@ -54,5 +71,27 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper<PhoneBill>{
             file.flush();
         }
         file.close();
+    }
+
+    /**
+     * Writes to the printwriter for the html get routine
+     * @param phonebill
+     */
+    public void dumpWrite(PrintWriter pw, PhoneBill phonebill, Date start, Date end) {
+        Collection<PhoneCall> calls = phonebill.getPhoneCalls();
+        pw.println("BILL FOR " + phonebill.getCustomer() + ":");
+        if(start == null && end == null){
+            for (PhoneCall i : calls) {
+                pw.println("\t" + i.toString());
+                pw.flush();
+            }
+        }else if(start != null && end != null){
+            for (PhoneCall i : calls) {
+                if(start.before(i.getStartTime()) && end.after(i.getEndTime())) {
+                    pw.println("\t" + i.toString());
+                    pw.flush();
+                }
+            }
+        }
     }
 }
