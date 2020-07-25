@@ -242,6 +242,11 @@ public class Project4 {
 
                 PhoneCall tempCall = new PhoneCall(callerNumber, calleeNumber, startDate, startTime, startAM_PM, endDate, endTime, endAM_PM);
 
+                if(tempCall.getStartTime().after(tempCall.getEndTime())){
+                    System.err.println("End time occurs before start time");
+                    System.exit(999);
+                }
+
                 try {
                     String definition = callerNumber + " " + calleeNumber + " " + startDate + " " + startTime + " " + startAM_PM + " " + endDate + " " + endTime + " " + endAM_PM;
                     client.addDictionaryEntry(customer, definition);
@@ -262,7 +267,7 @@ public class Project4 {
                             PrettyPrinter.writeOut(call);
                         }
                     }catch(IOException ex){
-                        System.err.println("IOExcept");
+                        System.err.println("Cannot connect to server");
                         System.exit(8000);
                     }catch(PhoneBillRestClient.PhoneBillRestException exc){
                         // not found
@@ -279,7 +284,7 @@ public class Project4 {
             // if search is specified, we don't care about -print
 
             if(argStart+7 < args.length){
-                System.err.println("Too many arguments");
+                System.err.println("Too many arguments for search function");
                 System.exit(10);
             }
             try {
@@ -323,113 +328,10 @@ public class Project4 {
                     System.exit(12);
                 }
             }catch(ArrayIndexOutOfBoundsException e){
-                System.err.println("Missing arguments");
+                System.err.println("Missing arguments for search function");
                 System.exit(9);
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-        String hostName = null;
-        String portString = null;
-        String word = null;
-        String definition = null;
-
-        for (String arg : args) {
-            if (hostName == null) {
-                hostName = arg;
-
-            } else if ( portString == null) {
-                portString = arg;
-
-            } else if (word == null) {
-                word = arg;
-
-            } else if (definition == null) {
-                definition = arg;
-
-            } else {
-                usage("Extraneous command line argument: " + arg);
-            }
-        }
-
-        if (hostName == null) {
-            usage( MISSING_ARGS );
-
-        } else if ( portString == null) {
-            usage( "Missing port" );
-        }
-
-        //int port;
-        try {
-            port = parseInt( portString );
-            
-        } catch (NumberFormatException ex) {
-            usage("Port \"" + portString + "\" must be an integer");
-            return;
-        }
-
-        //PhoneBillRestClient client = new PhoneBillRestClient(hostName, port);
-
-        String message;
-        try {
-            if (word == null) {
-                // Print all word/definition pairs
-                Map<String, String> dictionary = client.getAllDictionaryEntries();
-                StringWriter sw = new StringWriter();
-                Messages.formatDictionaryEntries(new PrintWriter(sw, true), dictionary);
-                message = sw.toString();
-
-            } else if (definition == null) {
-                // Print all dictionary entries
-                message = Messages.formatDictionaryEntry(word, client.getDefinition(word));
-
-            } else {
-                // Post the word/definition pair
-                client.addDictionaryEntry(word, definition);
-                message = Messages.definedWordAs(word, definition);
-            }
-
-        } catch ( IOException ex ) {
-            error("While contacting server: " + ex);
-            return;
-        }
-
-        System.out.println(message);
-*/
         System.exit(0);
     }
 
