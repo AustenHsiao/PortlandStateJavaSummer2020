@@ -154,7 +154,7 @@ public class Project4 {
     public static final String MISSING_ARGS = "Missing command line arguments";
 
     public static void main(String... args) {
-
+        PhoneBillRestClient client = null;
         int host = 0;
         String hostname = "";
         int port = -1;
@@ -198,9 +198,17 @@ public class Project4 {
             }
         }
 
-        PhoneBillRestClient client = new PhoneBillRestClient(hostname, port);
+        if (host == 1 && port != -1) {
+            client = new PhoneBillRestClient(hostname, port);
+        }else if(host == 1 && port == -1){
+            System.err.println("Port number not specified");
+            System.exit(14);
+        }else if(host != 1 && port != -1){
+            System.err.println("Hostname not specified");
+            System.exit(15);
+        }
 
-        if(search == 1){
+        if(search == 1 && host == 1 && port != -1){
             // if search is specified, we don't care about -print
 
             if(argStart+6+1 < args.length){
@@ -239,10 +247,10 @@ public class Project4 {
                     if(client.getAllDictionaryEntries().containsKey(customer)){
                         PhoneBill customerBill = client.getAllDictionaryEntries().get(customer);
                         if(PrettyPrinter.writeOut(customerBill, temp.getStartTime(), temp.getEndTime()) == 0){
-                            System.out.println("No calls to display.");
+                            System.out.println("No calls to display between the given time interval.");
                         }
                     }
-                    System.exit(13);
+                    System.exit(13); // if -search, do nothing else
                 }catch (IOException e){
                     System.err.println("IO Except");
                     System.exit(12);
@@ -251,7 +259,6 @@ public class Project4 {
                 System.err.println("Missing arguments");
                 System.exit(9);
             }
-
         }
 
 
