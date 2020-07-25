@@ -24,7 +24,6 @@ import static java.lang.Integer.parseInt;
  */
 public class PhoneBillServlet extends HttpServlet
 {
-
     /**
      * Tests if a string is a valid phone number in the form xxx-xxx-xxxx
      * where x is [0-9]. Length of string should be 12 (10 digits and 2 hyphens).

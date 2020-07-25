@@ -4,6 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.net.HttpURLConnection.HTTP_OK;
@@ -34,9 +35,54 @@ public class PhoneBillRestClient extends HttpRequestHelper
     /**
      * Returns all dictionary entries from the server
      */
-    public Map<String, String> getAllDictionaryEntries() throws IOException {
-      Response response = get(this.url, Map.of());
-      return Messages.parseDictionary(response.getContent());
+    public Map<String, PhoneBill> getAllDictionaryEntries() throws IOException {
+        Map<String, PhoneBill> phoneBook = new HashMap<String, PhoneBill>();
+
+        String customerName = "";
+        String caller;
+        String callee;
+        String startDate;
+        String endDate;
+        String startTime;
+        String endTime;
+        String startTimeAMPM;
+        String endTimeAMPM;
+        PhoneCall temp;
+
+        Response response = get(this.url, Map.of());
+
+        if(response.getContent().equals("No phonebills to display")){
+            return phoneBook;
+        }
+
+        // I rewrote the parser so I could work through the logic and jog my memory...
+        String[] completeDictionary = response.getContent().split("\n");
+
+
+        for(String line: completeDictionary){
+            if(line.contains("BILL FOR")){
+                customerName = line.split("BILL FOR ")[1].split(":")[0];
+                phoneBook.put(customerName, new PhoneBill(customerName));
+            }else{
+                String[] currentLine = line.split(" ");
+                caller = currentLine[3];
+                callee = currentLine[5];
+                startDate = Project4.TwoDigitDate(currentLine[7].split(",")[0]);
+                endDate = Project4.TwoDigitDate(currentLine[11].split(",")[0]);
+                startTime = currentLine[8];
+                endTime = currentLine[12];
+                startTimeAMPM = currentLine[9];
+                endTimeAMPM = currentLine[13];
+
+                // we are relying on the assumption that our values are well formed such that the "BILL FOR"
+                // line is always read first.
+                temp = new PhoneCall(caller, callee, startDate, startTime, startTimeAMPM, endDate, endTime, endTimeAMPM);
+                PhoneBill tempBill = phoneBook.get(customerName);
+                tempBill.addPhoneCall(temp);
+                phoneBook.replace(customerName, tempBill);
+            }
+      }
+      return phoneBook;
     }
 
     /**
