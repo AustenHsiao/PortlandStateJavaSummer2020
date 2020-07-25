@@ -1,10 +1,7 @@
 package edu.pdx.cs410J.ahsiao;
-
 import edu.pdx.cs410J.web.HttpRequestHelper;
-
 import java.io.*;
 import java.util.Collection;
-import java.util.Map;
 
 import static java.lang.Integer.parseInt;
 
@@ -208,10 +205,80 @@ public class Project4 {
             System.exit(15);
         }
 
+        if(host == 1 && port != -1 && search == 0){
+            int argumentCounter = 0;
+
+            if(argStart+9 < args.length){
+                System.err.println("Too many arguments");
+                System.exit(19);
+            }
+            try {
+                String customer = args[argStart]; argumentCounter++;
+                String callerNumber = args[argStart + 1]; argumentCounter++;
+                String calleeNumber = args[argStart + 2]; argumentCounter++;
+                String startDate = args[argStart + 3]; argumentCounter++;
+                String startTime = args[argStart + 4]; argumentCounter++;
+                String startAM_PM = args[argStart + 5]; argumentCounter++;
+                String endDate = args[argStart + 6]; argumentCounter++;
+                String endTime = args[argStart + 7]; argumentCounter++;
+                String endAM_PM = args[argStart + 8]; argumentCounter++;
+
+                if (!validPhoneNumber(callerNumber) || !validPhoneNumber(calleeNumber)) {
+                    System.err.println("Invalid caller or callee number");
+                    System.exit(16);
+                } else if (!validDate(startDate) || !validDate(endDate)) {
+                    System.err.println("Invalid start or end date");
+                    System.exit(20);
+                } else if (!validTime(startTime) || !validTime(endTime)) {
+                    System.err.println("Invalid start or end time");
+                    System.exit(21);
+                } else if (!startAM_PM.equalsIgnoreCase("AM") && !startAM_PM.equalsIgnoreCase("PM")) {
+                    System.err.println("start time am/pm not specified");
+                    System.exit(22);
+                } else if (!endAM_PM.equalsIgnoreCase("AM") && !endAM_PM.equalsIgnoreCase("PM")) {
+                    System.err.println("end time am/pm not specified");
+                    System.exit(23);
+                }
+
+                PhoneCall tempCall = new PhoneCall(callerNumber, calleeNumber, startDate, startTime, startAM_PM, endDate, endTime, endAM_PM);
+
+                try {
+                    String definition = callerNumber + " " + calleeNumber + " " + startDate + " " + startTime + " " + startAM_PM + " " + endDate + " " + endTime + " " + endAM_PM;
+                    client.addDictionaryEntry(customer, definition);
+                }catch(IOException e){
+                    System.err.println("IO Except caught");
+                    System.exit(5000);
+                }
+
+                if(print == 1){
+                    PrettyPrinter.writeOut(tempCall);
+                }
+            }catch(ArrayIndexOutOfBoundsException e){
+                if(argumentCounter == 1){
+                    try {
+                        PhoneBill temp = client.getDefinition(args[argStart]);
+                        Collection<PhoneCall> tempPhoneCalls = temp.getPhoneCalls();
+                        for(PhoneCall call: tempPhoneCalls){
+                            PrettyPrinter.writeOut(call);
+                        }
+                    }catch(IOException ex){
+                        System.err.println("IOExcept");
+                        System.exit(8000);
+                    }catch(PhoneBillRestClient.PhoneBillRestException exc){
+                        // not found
+                        System.out.println("No calls for this customer on file");
+                        System.exit(9000);
+                    }
+                }
+                System.err.println("Missing command line arguments");
+                System.exit(18);
+            }
+        }
+
         if(search == 1 && host == 1 && port != -1){
             // if search is specified, we don't care about -print
 
-            if(argStart+6+1 < args.length){
+            if(argStart+7 < args.length){
                 System.err.println("Too many arguments");
                 System.exit(10);
             }
@@ -260,6 +327,10 @@ public class Project4 {
                 System.exit(9);
             }
         }
+
+
+
+
 
 
 

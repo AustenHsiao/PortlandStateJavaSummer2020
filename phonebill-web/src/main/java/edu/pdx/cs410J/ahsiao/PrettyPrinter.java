@@ -50,6 +50,18 @@ public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
         }
     }
 
+    public static void writeOut(PhoneCall call){
+        try {
+            PrettyPrinter temp = new PrettyPrinter("");
+            temp.dump(call);
+            return;
+
+        }catch(IOException e){
+            System.err.println("Something went wrong when trying to write to file.");
+            return;
+        }
+    }
+
     /**
      * Dump will use the Collection returned by phonebill's getPhoneCalls() method and sort all by the natural ordering.
      * Then depending on the file name, will either print out or write to file.
@@ -117,5 +129,15 @@ public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
             }
         }
         return count;
+    }
+
+    public void dump(PhoneCall call) throws IOException {
+        Long duration = call.getEndTime().getTime() - call.getStartTime().getTime();
+        int duration_minutes = (int) (duration / 6e+4);
+
+        System.out.print("Call from " + call.getCaller() + " to " + call.getCallee() + "\n");
+        System.out.print("Call start time: " + DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(call.getStartTime()) + "\n");
+        System.out.print("Call end time: " + DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(call.getEndTime()) + "\n");
+        System.out.print("Call duration: " + duration_minutes + " minutes\n\n");
     }
 }

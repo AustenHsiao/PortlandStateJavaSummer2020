@@ -37,7 +37,7 @@ public class Project4IT extends InvokeMainTestCase {
     @Test
     public void test2EmptyServer() {
         MainMethodResult result = invokeMain( Project4.class, HOSTNAME, PORT );
-        assertThat(result.getTextWrittenToStandardError(), result.getExitCode(), equalTo(0));
+        assertThat(result.getTextWrittenToStandardError(), result.getExitCode(), equalTo(18));
         String out = result.getTextWrittenToStandardOut();
         //assertThat(out, out, containsString(Messages.formatWordCount(0)));
     }
