@@ -48,9 +48,9 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper<PhoneBill>{
         temp.dumpWrite(pw, phoneBill, null, null);
     }
 
-    public static void write(PrintWriter pw, PhoneBill phoneBill, Date start, Date end){
+    public static int write(PrintWriter pw, PhoneBill phoneBill, Date start, Date end){
         TextDumper temp = new TextDumper("");
-        temp.dumpWrite(pw, phoneBill, start, end);
+        return temp.dumpWrite(pw, phoneBill, start, end);
     }
 
     /**
@@ -74,24 +74,28 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper<PhoneBill>{
     }
 
     /**
-     * Writes to the printwriter for the html get routine
+     * Writes to the printwriter for the html get routine. Returns the number of phonecalls.
      * @param phonebill
      */
-    public void dumpWrite(PrintWriter pw, PhoneBill phonebill, Date start, Date end) {
+    public int dumpWrite(PrintWriter pw, PhoneBill phonebill, Date start, Date end) {
         Collection<PhoneCall> calls = phonebill.getPhoneCalls();
+        int numberOfCalls = 0;
         pw.println("BILL FOR " + phonebill.getCustomer() + ":");
         if(start == null && end == null){
             for (PhoneCall i : calls) {
                 pw.println("\t" + i.toString());
+                numberOfCalls++;
                 pw.flush();
             }
         }else if(start != null && end != null){
             for (PhoneCall i : calls) {
-                if(start.before(i.getStartTime()) && end.after(i.getEndTime())) {
+                if(start.before(i.getStartTime()) && end.after(i.getStartTime())) {
                     pw.println("\t" + i.toString());
+                    numberOfCalls++;
                     pw.flush();
                 }
             }
         }
+        return numberOfCalls;
     }
 }

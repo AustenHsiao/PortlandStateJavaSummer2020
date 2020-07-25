@@ -367,13 +367,18 @@ public class PhoneBillServlet extends HttpServlet
 
     private void writeDefinition(String name, HttpServletResponse response, Date start, Date end) throws IOException {
         PrintWriter pw = response.getWriter();
+        int numberOfCalls = 0;
 
         if( !this.dictionary.containsKey(name)){
             pw.println("No entry found");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
-            TextDumper.write(pw, this.dictionary.get(name), start, end);
+            numberOfCalls = TextDumper.write(pw, this.dictionary.get(name), start, end);
             response.setStatus(HttpServletResponse.SC_OK);
+        }
+
+        if(numberOfCalls == 0){
+            pw.println("No calls found between the specified times.");
         }
     }
 
