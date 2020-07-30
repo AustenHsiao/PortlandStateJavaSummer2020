@@ -13,18 +13,29 @@ import static java.lang.Integer.parseInt;
  */
 public class Project4 {
 
+    /**
+     * Print out the readme for p4
+     */
     public static void printReadme(){
-        try (InputStream readme = Project4.class.getResourceAsStream("README_p4.txt");){
-            String line;
-            BufferedReader read = new BufferedReader(new InputStreamReader(readme));
-            while( (line = read.readLine()) != null){
-                System.out.println(line);
-            }
-        }catch(FileNotFoundException e){
-            System.err.println("Cannot find readme file.");
-        }catch(IOException e){
-            System.err.println("Cannot read readme file.");
-        }
+        System.out.println("Written by Austen Hsiao for CS510, assignment 4.\n");
+        System.out.println("This program is used to connect to a server to:\n" +
+                "    (1) Print out a user's phonebill information\n" +
+                "    (2) Print out a user's phonebill phonecalls starting within a given time frame\n" +
+                "    (3) Add a phone call to a user's phone bill\n");
+        System.out.println("usage: java edu.pdx.cs410J.ahsiao.Project4 [options] <args>\n" +
+                "    args are (in this order):\n" +
+                "        customer               Person whose phone bill we are modeling\n" +
+                "        callerNumber           Phone number of caller\n" +
+                "        calleeNumber           Phone number of person who was called\n" +
+                "        start                  Date and time (am/pm) call began\n" +
+                "        end                    Date and time (am/pm) call ended\n" +
+                "    options are (options may appear in any order):\n" +
+                "        -host hostname         Host computer on which the server runs\n" +
+                "        -port port             Port on which the server is listening\n" +
+                "        -search                Phone calls should be searched for\n" +
+                "        -print                 Prints a description of the new phone call\n" +
+                "        -README                Prints a README for this project and exits\n" +
+                "    Dates and times should be in the format: mm/dd/yyyy hh:mm am/pm");
     }
 
     /**
@@ -162,33 +173,33 @@ public class Project4 {
         if(args.length == 0){
             System.err.println("Missing command line arguments");
             System.exit(1);
-        }else{
-            for(int i = 0; i < args.length; ++i){
-                if(args[i].equals("-host")){
+        } else {
+            for (int i = 0; i < args.length; ++i) {
+                if (args[i].equals("-host")) {
                     host = 1;
-                    hostname = args[i+1];
+                    hostname = args[i + 1];
                     argStart += 2;
-                }else if(args[i].equals("-port")){
+                } else if (args[i].equals("-port")) {
                     try {
                         port = parseInt(args[i + 1]);
                         argStart += 2;
-                        if(port < 0 || port > 65535){
+                        if (port < 0 || port > 65535) {
                             throw new NumberFormatException("Out of range");
                         }
-                    }catch(NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         System.err.println("Port specified must be an int between [0, 65535]");
                         System.exit(2);
                     }
-                }else if(args[i].equals("-search")){
+                } else if (args[i].equals("-search")) {
                     search = 1;
                     argStart++;
-                }else if(args[i].equals("-print")){
+                } else if (args[i].equals("-print")) {
                     print = 1;
                     argStart++;
-                }else if(args[i].equals("-README")){
+                } else if (args[i].equals("-README")) {
                     printReadme();
                     System.exit(3);
-                }else if(args[i].charAt(0) == '-'){
+                } else if (args[i].charAt(0) == '-') {
                     System.err.println("Option not recognized");
                     System.exit(4);
                 }
@@ -205,6 +216,7 @@ public class Project4 {
             System.exit(15);
         }
 
+        // -print or no additional option
         if(host == 1 && port != -1 && search == 0){
             int argumentCounter = 0;
 
@@ -251,7 +263,7 @@ public class Project4 {
                     String definition = callerNumber + " " + calleeNumber + " " + startDate + " " + startTime + " " + startAM_PM + " " + endDate + " " + endTime + " " + endAM_PM;
                     client.addDictionaryEntry(customer, definition);
                 }catch(IOException e){
-                    System.err.println("IO Except caught");
+                    System.err.println("Cannot connect to server");
                     System.exit(5000);
                 }
 
@@ -266,20 +278,22 @@ public class Project4 {
                         for(PhoneCall call: tempPhoneCalls){
                             PrettyPrinter.writeOut(call);
                         }
+                        System.exit(808);
                     }catch(IOException ex){
                         System.err.println("Cannot connect to server");
                         System.exit(8000);
                     }catch(PhoneBillRestClient.PhoneBillRestException exc){
                         // not found
-                        System.out.println("No calls for this customer on file");
+                        System.err.println("No data associated with this customer");
                         System.exit(9000);
                     }
                 }
-                System.err.println("Missing command line arguments");
+                usage("Invalid arguments");
                 System.exit(18);
             }
         }
 
+        // search enabled
         if(search == 1 && host == 1 && port != -1){
             // if search is specified, we don't care about -print
 
@@ -319,12 +333,16 @@ public class Project4 {
                     if(client.getAllDictionaryEntries().containsKey(customer)){
                         PhoneBill customerBill = client.getAllDictionaryEntries().get(customer);
                         if(PrettyPrinter.writeOut(customerBill, temp.getStartTime(), temp.getEndTime()) == 0){
-                            System.out.println("No calls to display between the given time interval.");
+                            System.err.println("No calls to display between the given time interval.");
+                            System.exit(4444);
                         }
+                    }else{
+                        System.err.println("No data associated with this customer");
+                        System.exit(3333);
                     }
                     System.exit(13); // if -search, do nothing else
                 }catch (IOException e){
-                    System.err.println("IO Except");
+                    System.err.println("Cannot connect to server");
                     System.exit(12);
                 }
             }catch(ArrayIndexOutOfBoundsException e){
@@ -332,28 +350,70 @@ public class Project4 {
                 System.exit(9);
             }
         }
-        System.exit(0);
-    }
 
-    /**
-     * Makes sure that the give response has the expected HTTP status code
-     * @param code The expected status code
-     * @param response The response from the server
-     */
-    private static void checkResponseCode( int code, HttpRequestHelper.Response response )
-    {
-        if (response.getCode() != code) {
-            error(String.format("Expected HTTP code %d, got code %d.\n\n%s", code,
-                                response.getCode(), response.getContent()));
+        /* if host and port are not specified, we can only use the -print function
+
+         */
+        if(host == 0 && port == -1 && search == 1){
+            System.err.println("Cannot search without being connected to server");
+            System.exit(55);
         }
-    }
 
-    private static void error( String message )
-    {
-        PrintStream err = System.err;
-        err.println("** " + message);
+        if(host == 0 && port == -1 && search == 0 && print == 1) {
+            int argumentCounter = 0;
 
-        System.exit(1);
+            if (argStart + 9 < args.length) {
+                System.err.println("Too many arguments");
+                System.exit(19);
+            }
+            String customer = args[argStart];
+            argumentCounter++;
+            String callerNumber = args[argStart + 1];
+            argumentCounter++;
+            String calleeNumber = args[argStart + 2];
+            argumentCounter++;
+            String startDate = args[argStart + 3];
+            argumentCounter++;
+            String startTime = args[argStart + 4];
+            argumentCounter++;
+            String startAM_PM = args[argStart + 5];
+            argumentCounter++;
+            String endDate = args[argStart + 6];
+            argumentCounter++;
+            String endTime = args[argStart + 7];
+            argumentCounter++;
+            String endAM_PM = args[argStart + 8];
+            argumentCounter++;
+
+            if (!validPhoneNumber(callerNumber) || !validPhoneNumber(calleeNumber)) {
+                System.err.println("Invalid caller or callee number");
+                System.exit(16);
+            } else if (!validDate(startDate) || !validDate(endDate)) {
+                System.err.println("Invalid start or end date");
+                System.exit(20);
+            } else if (!validTime(startTime) || !validTime(endTime)) {
+                System.err.println("Invalid start or end time");
+                System.exit(21);
+            } else if (!startAM_PM.equalsIgnoreCase("AM") && !startAM_PM.equalsIgnoreCase("PM")) {
+                System.err.println("start time am/pm not specified");
+                System.exit(22);
+            } else if (!endAM_PM.equalsIgnoreCase("AM") && !endAM_PM.equalsIgnoreCase("PM")) {
+                System.err.println("end time am/pm not specified");
+                System.exit(23);
+            }
+
+            PhoneCall tempCall = new PhoneCall(callerNumber, calleeNumber, startDate, startTime, startAM_PM, endDate, endTime, endAM_PM);
+
+            if (tempCall.getStartTime().after(tempCall.getEndTime())) {
+                System.err.println("End time occurs before start time");
+                System.exit(999);
+            }
+            PrettyPrinter.writeOut(tempCall);
+        }
+
+        // dont care about the case with no flags, its not getting saved..
+
+        System.exit(0);
     }
 
     /**
@@ -377,7 +437,5 @@ public class Project4 {
         err.println("is printed.");
         err.println("If no word is specified, all dictionary entries are printed");
         err.println();
-
-        System.exit(1);
     }
 }

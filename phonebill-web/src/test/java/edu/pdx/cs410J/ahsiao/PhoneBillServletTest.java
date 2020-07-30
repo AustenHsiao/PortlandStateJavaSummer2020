@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
  * provide mock http requests and responses.
  */
 public class PhoneBillServletTest {
-/*
+
   @Test
   public void initiallyServletContainsNoDictionaryEntries() throws ServletException, IOException {
     PhoneBillServlet servlet = new PhoneBillServlet();
@@ -34,7 +34,7 @@ public class PhoneBillServletTest {
     servlet.doGet(request, response);
 
     int expectedWords = 0;
-    verify(pw).println(Messages.formatWordCount(expectedWords));
+    verify(pw).println("No phonebills to display");
     verify(response).setStatus(HttpServletResponse.SC_OK);
   }
 
@@ -42,12 +42,12 @@ public class PhoneBillServletTest {
   public void addOneWordToDictionary() throws ServletException, IOException {
     PhoneBillServlet servlet = new PhoneBillServlet();
 
-    String word = "TEST WORD";
-    String definition = "TEST DEFINITION";
-
+    String word = "Name";
+    PhoneBill definition = new PhoneBill("Name", new PhoneCall("111-111-1111", "222-222-2222", "7/26/2020", "3:00", "am", "7/26/2020", "3:45", "am"));
+    String defn = "111-111-1111 222-222-2222 7/26/2020 3:00 am 7/26/2020 3:45 am";
     HttpServletRequest request = mock(HttpServletRequest.class);
-    when(request.getParameter("word")).thenReturn(word);
-    when(request.getParameter("definition")).thenReturn(definition);
+    when(request.getParameter("customer")).thenReturn(word);
+    when(request.getParameter("definition")).thenReturn(defn);
 
     HttpServletResponse response = mock(HttpServletResponse.class);
 
@@ -59,15 +59,14 @@ public class PhoneBillServletTest {
 
     servlet.doPost(request, response);
 
-    assertThat(stringWriter.toString(), containsString(Messages.definedWordAs(word, definition)));
+    assertThat(stringWriter.toString(), containsString(""));
+    assertThat(servlet.getDefinition(word).getCustomer(), containsString("Name"));
 
     // Use an ArgumentCaptor when you want to make multiple assertions against the value passed to the mock
     ArgumentCaptor<Integer> statusCode = ArgumentCaptor.forClass(Integer.class);
     verify(response).setStatus(statusCode.capture());
 
     assertThat(statusCode.getValue(), equalTo(HttpServletResponse.SC_OK));
-
-    assertThat(servlet.getDefinition(word), equalTo(definition));
-  }*/
+  }
 
 }

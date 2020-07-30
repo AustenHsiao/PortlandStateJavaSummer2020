@@ -89,27 +89,11 @@ public class PhoneBillRestClient extends HttpRequestHelper
      * Returns the definition for the given word
      */
     public PhoneBill getDefinition(String word) throws IOException {
-        Response response = get(this.url, Map.of("customer", word));
-        PhoneBill temp;
-        String customerName = word;
-        String caller;
-        String callee;
-        String startDate;
-        String endDate;
-        String startTime;
-        String endTime;
-        String startTimeAMPM;
-        String endTimeAMPM;
-        throwExceptionIfNotOkayHttpStatus(response); // 404 if not found-- PhoneBillRestException
-
-        String[] content = response.getContent().split("\n");
-        for(String line: content) {
-            if (line.contains("BILL FOR")) {
-                customerName = line.split("BILL FOR ")[1].split(":")[0];
-                temp = new PhoneBill(customerName);
-            }
+        Map<String, PhoneBill> phoneBook = getAllDictionaryEntries();
+        if(phoneBook.containsKey(word)){
+            return phoneBook.get(word);
         }
-        return null;
+        throw new PhoneBillRestException(404);
     }
 
     public void addDictionaryEntry(String word, String definition) throws IOException {

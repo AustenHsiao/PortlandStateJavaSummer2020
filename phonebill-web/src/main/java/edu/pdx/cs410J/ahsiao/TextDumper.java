@@ -38,16 +38,24 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper<PhoneBill>{
     }
 
     /**
-     * used for calling the dumpWrite method which is used to print for web app
+     * used for calling the dumpWrite method which is used to print for web app (no search)
      * @param pw
      * @param phoneBill
      * @return
      */
-    public static void write(PrintWriter pw, PhoneBill phoneBill){
+    public static int write(PrintWriter pw, PhoneBill phoneBill){
         TextDumper temp = new TextDumper("");
-        temp.dumpWrite(pw, phoneBill, null, null);
+        return temp.dumpWrite(pw, phoneBill, null, null);
     }
 
+    /**
+     * used for calling dumpwrite with search
+     * @param pw
+     * @param phoneBill
+     * @param start
+     * @param end
+     * @return
+     */
     public static int write(PrintWriter pw, PhoneBill phoneBill, Date start, Date end){
         TextDumper temp = new TextDumper("");
         return temp.dumpWrite(pw, phoneBill, start, end);
@@ -96,6 +104,7 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper<PhoneBill>{
                 }
             }
         }
+        pw.close();
         return numberOfCalls;
     }
 }
