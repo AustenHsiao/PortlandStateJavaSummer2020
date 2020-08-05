@@ -9,4 +9,10 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="readme">readme</string>
+    <string name="add_phonebill">add phonebill</string>
+    <string name="add_phonecall">add phonecall</string>
+    <string name="search">search</string>
+    <string name="display">display</string>
+    <string name="display_phonebill_information">display phonebill information</string>
 </resources>
