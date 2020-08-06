@@ -20,6 +20,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <include layout="@layout/content_main" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -28,59 +30,53 @@
             android:id="@+id/readme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="104dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="130dp"
             android:onClick="readme"
             android:text="@string/readme"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="readme" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/addphonebill"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
             android:onClick="addPhoneBill"
-            android:text="@string/add_phonebill"
+            android:text="@string/add_phone_bill"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/readme"
-            tools:text="add phonebill" />
+            app:layout_constraintTop_toBottomOf="@+id/readme" />
 
         <Button
             android:id="@+id/addphonecall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/add_phonecall"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
+            android:text="@string/add_phone_call"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addphonebill"
-            tools:text="add phonecall" />
+            app:layout_constraintTop_toBottomOf="@+id/addphonebill" />
 
         <Button
             android:id="@+id/search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
             android:text="@string/search"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addphonecall"
-            tools:text="search" />
+            app:layout_constraintTop_toBottomOf="@+id/addphonecall" />
 
         <Button
-            android:id="@+id/print"
+            android:id="@+id/display"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:contentDescription="@string/display_phonebill_information"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
             android:text="@string/display"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search"
-            tools:text="display" />
+            app:layout_constraintTop_toBottomOf="@+id/search" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
