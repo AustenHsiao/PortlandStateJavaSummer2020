@@ -11,8 +11,8 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_create_phone_bill">CreatePhoneBill</string>
     <string name="readme">readme</string>
-    <string name="add_phone_bill">add phone bill</string>
-    <string name="add_phone_call">add phone call</string>
+    <string name="add_phone_bill">add new phone bill</string>
+    <string name="add_phone_call">add phone call to existing phone bill</string>
     <string name="search">search</string>
     <string name="display">display</string>
     <string name="help_msg_phone_bill">Add new phone bill\nEnter customer name:</string>
@@ -20,5 +20,16 @@
     <string name="create">create</string>
     <string name="title_activity_readme_screen">readmeScreen</string>
     <string name="go_back">Go Back</string>
-    <string name="this_app_is_written_by_austen_hsiao_for_cs410_assignment_5_n_nthis_application_is_used_to_organize_phone_bill_data_for_a_set_of_given_users_n_neach_customer_will_have_a_set_of_phone_calls_a_user_may_n_t_1_create_a_new_phone_bill_n_t_2_add_phone_call_data_to_a_specific_phone_bill_n_t_3_search_phone_calls_within_a_given_phone_bill_n_t_4_display_all_phone_call_data">This app is written by Austen Hsiao for CS410, assignment 5\n\nThis application is used to organize phone bill data for a set of given users\n\nEach customer will have a set of phone calls. A user may:\n\t(1)Create a new phone bill\n\t(2)Add phone call data to a specific phone bill\n\t(3)Search phone calls within a given phone bill\n\t(4)Display all phone call data</string>
+    <string name="read_me">This app is written by Austen Hsiao for CS410, assignment 5\n\nThis application is used to organize phone bill data for a set of given users\n\nEach customer will have a set of phone calls. A user may:\n\t(1)Create a new phone bill\n\t(2)Add phone call data to a specific phone bill\n\t(3)Search phone calls within a given phone bill\n\t(4)Display all phone call data</string>
+    <string name="title_activity_add_new_phone_call_page">addNewPhoneCallPage</string>
+    <string name="caller_number">Caller #: xxx-xxx-xxxx</string>
+    <string name="phonecallHelp">Add new phone call to existing phone bill\nSpecify the following information:</string>
+    <string name="callee_number">Callee #: xxx-xxx-xxxx</string>
+    <string name="phonebill_customer">PhoneBill Customer</string>
+    <string name="start_date_mm_dd_yyyy">Start date: MM/dd/yyyy</string>
+    <string name="start_time_hh_mm">Start time: hh:mm</string>
+    <string name="end_date_mm_dd_yyyy">End date: MM/dd/yyyy</string>
+    <string name="am_pm">am/pm</string>
+    <string name="end_time_hh_mm">End time: hh:mm</string>
+    <string name="add_call_data">Add Call Data</string>
 </resources>

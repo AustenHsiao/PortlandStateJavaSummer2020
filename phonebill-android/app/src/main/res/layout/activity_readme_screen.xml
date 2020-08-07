@@ -41,7 +41,7 @@
             android:layout_width="388dp"
             android:layout_height="293dp"
             android:layout_marginTop="148dp"
-            android:text="@string/this_app_is_written_by_austen_hsiao_for_cs410_assignment_5_n_nthis_application_is_used_to_organize_phone_bill_data_for_a_set_of_given_users_n_neach_customer_will_have_a_set_of_phone_calls_a_user_may_n_t_1_create_a_new_phone_bill_n_t_2_add_phone_call_data_to_a_specific_phone_bill_n_t_3_search_phone_calls_within_a_given_phone_bill_n_t_4_display_all_phone_call_data"
+            android:text="@string/read_me"
             android:textColor="#1D33AA"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"

@@ -65,7 +65,16 @@ public class MainActivity extends AppCompatActivity {
             // request code 1 is for creating new phone bills. We get sent back a new hashmap, so we overwrite
             // the original hash map with the returning one.
             if (resultCode == RESULT_OK) {
+                Log.d("Map return", "Create phone bill");
                 this.phoneBillHashMap = (HashMap<String, PhoneBill>)data.getExtras().get("mapReturn");
+            }
+        }else if(requestCode == 2){
+            if (resultCode == RESULT_OK) {
+                Log.d("Map return", "Added phone call");
+                this.phoneBillHashMap = (HashMap<String, PhoneBill>)data.getExtras().get("mapReturn");
+                for(Object i: this.phoneBillHashMap.get("Austen").getPhoneCalls()){
+                    Log.d("AUSTEN CALL TEST", ((PhoneCall)i).toString());
+                }
             }
         }
     }
@@ -74,6 +83,14 @@ public class MainActivity extends AppCompatActivity {
         Intent addNewPhoneBillPage = new Intent(this, CreatePhoneBill.class);
         addNewPhoneBillPage.putExtra("map", phoneBillHashMap);
         startActivityForResult(addNewPhoneBillPage, 1);
+    }
+
+    public void addPhoneCall(View v){
+        // I have to check if the phone bill even exists, so again, we have to move the HashMap around.
+        // Also similar to before, a successful add will give back a new hashmap to overwrite the old one.
+        Intent addNewPhoneCallPage = new Intent(this, AddPhoneCall.class);
+        addNewPhoneCallPage.putExtra("map", phoneBillHashMap);
+        startActivityForResult(addNewPhoneCallPage, 2);
     }
 
     public void readme(View v){
