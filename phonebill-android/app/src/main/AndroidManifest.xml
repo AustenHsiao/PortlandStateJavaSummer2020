@@ -10,9 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".showMatches"
+            android:label="@string/title_activity_show_matches"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".search"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".AddPhoneCall"
             android:label="@string/title_activity_add_new_phone_call_page"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".readmeScreen"
             android:label="@string/title_activity_readme_screen"

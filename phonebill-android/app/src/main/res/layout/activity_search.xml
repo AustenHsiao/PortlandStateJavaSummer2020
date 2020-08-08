@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".search">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/desc"
+            android:layout_width="398dp"
+            android:layout_height="118dp"
+            android:layout_marginTop="100dp"
+            android:text="@string/searchDesc"
+            android:textAlignment="center"
+            android:textColor="#3A51D1"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/startDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="@string/start_date_mm_dd_yyyy"
+            android:importantForAutofill="no"
+            android:inputType="date"
+            android:maxLength="10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/billsearchname" />
+
+        <EditText
+            android:id="@+id/startTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:ems="10"
+            android:hint="@string/start_time_hh_mm"
+            android:importantForAutofill="no"
+            android:inputType="time"
+            android:maxLength="5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startDate" />
+
+        <EditText
+            android:id="@+id/endTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:ems="10"
+            android:hint="@string/end_time_hh_mm"
+            android:importantForAutofill="no"
+            android:inputType="time"
+            android:maxLength="5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/endDate" />
+
+        <EditText
+            android:id="@+id/end_ampm"
+            android:layout_width="94dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="248dp"
+            android:ems="10"
+            android:hint="@string/am_pm"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:maxLength="2"
+            app:layout_constraintStart_toEndOf="@+id/endTime"
+            app:layout_constraintTop_toBottomOf="@+id/desc" />
+
+        <EditText
+            android:id="@+id/start_ampm"
+            android:layout_width="92dp"
+            android:layout_height="47dp"
+            android:layout_marginTop="128dp"
+            android:ems="10"
+            android:hint="@string/am_pm"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:maxLength="2"
+            app:layout_constraintStart_toEndOf="@+id/startTime"
+            app:layout_constraintTop_toBottomOf="@+id/desc" />
+
+        <EditText
+            android:id="@+id/endDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="28dp"
+            android:ems="10"
+            android:hint="@string/end_date_mm_dd_yyyy"
+            android:importantForAutofill="no"
+            android:inputType="date"
+            android:maxLength="10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startTime" />
+
+        <EditText
+            android:id="@+id/billsearchname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="@string/enter_customer_name"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/desc"
+            android:importantForAutofill="no" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:onClick="searchButton"
+            android:text="@string/search"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/endTime" />
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:onClick="return_home"
+            android:text="@string/main_page"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

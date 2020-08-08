@@ -28,7 +28,7 @@ public class AddPhoneCall extends AppCompatActivity {
     }
 
     // Copy and pasted from assignment 1
-    private static boolean validPhoneNumber(String phonenum){
+    public static boolean validPhoneNumber(String phonenum){
         if(phonenum.length() != 12){return false;}
         String[] splitNumber = phonenum.split("-");
         if(splitNumber.length != 3){return false;}
@@ -47,7 +47,7 @@ public class AddPhoneCall extends AppCompatActivity {
     }
 
     // Copy and pasted from assignment 1
-    private static boolean validDate(String date){
+    public static boolean validDate(String date){
         // At a minimum, the date can be represented as x/x/xxxx, which is 8 chars
         // On the flip side, the maximum is 10 chars
         if(date.length() < 8 || date.length() > 10){return false;}
@@ -89,7 +89,7 @@ public class AddPhoneCall extends AppCompatActivity {
     }
 
     // Copy and pasted from assignment 1
-    private static boolean validTime(String time){
+    public static boolean validTime(String time){
         if(time.length() < 4 || time.length() > 5){return false;}
         String[] splitTime = time.split(":");
         if(splitTime.length != 2){return false;}
@@ -164,6 +164,7 @@ public class AddPhoneCall extends AppCompatActivity {
         PhoneBill pcToAdd = phoneBillHashMap.get(name);
         pcToAdd.addPhoneCall(temp);
         phoneBillHashMap.replace(name, pcToAdd);
+        Toast.makeText(this, "Phone call added to bill", Toast.LENGTH_LONG).show();
 
         Intent create = new Intent(this, MainActivity.class);
         create.putExtra("mapReturn", phoneBillHashMap);

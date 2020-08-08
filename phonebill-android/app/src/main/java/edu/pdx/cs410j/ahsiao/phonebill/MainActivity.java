@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +33,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ArrayList<String> a = new ArrayList<String>(phoneBillHashMap.keySet());
+        for(String i: a){
+            for(Object j: phoneBillHashMap.get(i).getPhoneCalls()){
+                Log.d(i, ((PhoneCall)j).toString());
+            }
+        }
     }
 
     @Override
@@ -61,7 +73,13 @@ public class MainActivity extends AppCompatActivity {
         // This waits for the results from an activity
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1) {
+        if (requestCode == 0) {
+            // back from readme
+            if (resultCode == RESULT_OK) {
+                Log.d("Map return", "Coming back from readme");
+                this.phoneBillHashMap = (HashMap<String, PhoneBill>)data.getExtras().get("mapReturn");
+            }
+        }else if (requestCode == 1) {
             // request code 1 is for creating new phone bills. We get sent back a new hashmap, so we overwrite
             // the original hash map with the returning one.
             if (resultCode == RESULT_OK) {
@@ -72,9 +90,11 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Log.d("Map return", "Added phone call");
                 this.phoneBillHashMap = (HashMap<String, PhoneBill>)data.getExtras().get("mapReturn");
-                for(Object i: this.phoneBillHashMap.get("Austen").getPhoneCalls()){
-                    Log.d("AUSTEN CALL TEST", ((PhoneCall)i).toString());
-                }
+            }
+        }else if(requestCode == 3){
+            if (resultCode == RESULT_OK) {
+                Log.d("Map return", "Return from search");
+                this.phoneBillHashMap = (HashMap<String, PhoneBill>)data.getExtras().get("mapReturn");
             }
         }
     }
@@ -95,7 +115,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void readme(View v){
         Intent readmePage = new Intent(this, readmeScreen.class);
-        startActivity(readmePage);
+        readmePage.putExtra("map", phoneBillHashMap);
+        startActivityForResult(readmePage, 0);
+    }
+
+    public void Search(View v){
+        Intent searchPage = new Intent(this, search.class);
+        searchPage.putExtra("map", phoneBillHashMap);
+        startActivityForResult(searchPage, 3);
     }
 
 }

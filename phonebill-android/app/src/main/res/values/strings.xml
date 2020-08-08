@@ -13,8 +13,8 @@
     <string name="readme">readme</string>
     <string name="add_phone_bill">add new phone bill</string>
     <string name="add_phone_call">add phone call to existing phone bill</string>
-    <string name="search">search</string>
-    <string name="display">display</string>
+    <string name="search">search by start date</string>
+    <string name="display">display phone bill</string>
     <string name="help_msg_phone_bill">Add new phone bill\nEnter customer name:</string>
     <string name="enter_customer_name">Customer name</string>
     <string name="create">create</string>
@@ -32,4 +32,9 @@
     <string name="am_pm">am/pm</string>
     <string name="end_time_hh_mm">End time: hh:mm</string>
     <string name="add_call_data">Add Call Data</string>
+    <string name="title_activity_search">search</string>
+    <string name="searchDesc">Search user\'s phone bill by start date\n\nEnter a time window (start and end date) to search by:</string>
+    <string name="main_page">Main Page</string>
+    <string name="title_activity_show_matches">showMatches</string>
+    <string name="backtosearch">Return to search</string>
 </resources>
