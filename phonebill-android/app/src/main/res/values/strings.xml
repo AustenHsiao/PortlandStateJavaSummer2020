@@ -37,4 +37,7 @@
     <string name="main_page">Main Page</string>
     <string name="title_activity_show_matches">showMatches</string>
     <string name="backtosearch">Return to search</string>
+    <string name="title_activity_display">display</string>
+    <string name="displaymsg">Display all contents for a phone bill customer:</string>
+    <string name="submit">Submit</string>
 </resources>

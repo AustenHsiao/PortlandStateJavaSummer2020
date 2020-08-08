@@ -96,6 +96,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Map return", "Return from search");
                 this.phoneBillHashMap = (HashMap<String, PhoneBill>)data.getExtras().get("mapReturn");
             }
+        }else if(requestCode == 4){
+            if (resultCode == RESULT_OK) {
+                Log.d("Map return", "Return from display");
+                this.phoneBillHashMap = (HashMap<String, PhoneBill>)data.getExtras().get("mapReturn");
+            }
         }
     }
 
@@ -119,10 +124,16 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(readmePage, 0);
     }
 
-    public void Search(View v){
+    public void search(View v){
         Intent searchPage = new Intent(this, search.class);
         searchPage.putExtra("map", phoneBillHashMap);
         startActivityForResult(searchPage, 3);
+    }
+
+    public void display(View v){
+        Intent display = new Intent(this, display.class);
+        display.putExtra("map", phoneBillHashMap);
+        startActivityForResult(display, 4);
     }
 
 }

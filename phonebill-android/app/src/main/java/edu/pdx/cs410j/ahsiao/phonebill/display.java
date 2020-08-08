@@ -11,27 +11,36 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.HashMap;
 
-public class showMatches extends AppCompatActivity {
+public class display extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_matches);
+        setContentView(R.layout.activity_display);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
 
-        TextView output = ((TextView)findViewById(R.id.searchResults));
+
+    public void submit(View v){
+        HashMap<String, PhoneBill> phoneBillHashMap = (HashMap<String, PhoneBill>) getIntent().getExtras().get("map");
+        String name = ((TextView)findViewById(R.id.billName)).getText().toString();
+        if(!phoneBillHashMap.containsKey(name)){
+            Toast.makeText(this, "No phone bill data found for the specified customer", Toast.LENGTH_LONG).show();
+            return;
+        }
+        TextView output = ((TextView)findViewById(R.id.printOutArea));
         output.setText("");
-        PhoneBill matches = (PhoneBill) getIntent().getExtras().get("listOfMatches");
+        output.append("For customer " + name + "\n\n");
         int callCounter = 0;
-        output.append("Customer: " + matches.getCustomer() + "\n\n");
-        for(Object call: matches.getPhoneCalls()){
-            PhoneCall phoneCall = (PhoneCall) call;
 
+        for(Object call : phoneBillHashMap.get(name).getPhoneCalls()){
+            PhoneCall phoneCall = (PhoneCall) call;
             Long duration = phoneCall.getEndTime().getTime() - phoneCall.getStartTime().getTime();
             int duration_minutes = (int)(duration / 6e+4);
 
@@ -43,14 +52,16 @@ public class showMatches extends AppCompatActivity {
         }
 
         if(callCounter == 0){
-            output.append("No matches found");
+            output.append("No calls to display");
         }
+
     }
 
-    public void backToSearch(View v){
+    public void returnHomePage(View v){
         Intent goHome = new Intent(this, MainActivity.class);
-        goHome.putExtra("mapReturn", (HashMap<String, PhoneBill>) getIntent().getExtras().get("map"));
+        goHome.putExtra("mapReturn", (HashMap<String, PhoneBill>)getIntent().getExtras().get("map"));
         setResult(RESULT_OK, goHome);
         finish();
     }
+
 }

@@ -11,6 +11,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 
+import java.util.HashMap;
+
 public class readmeScreen extends AppCompatActivity {
 
     @Override
@@ -22,7 +24,9 @@ public class readmeScreen extends AppCompatActivity {
     }
 
     public void goHome(View v){
-        Intent goHomePage = new Intent(this, MainActivity.class);
-        startActivity(goHomePage);
+        Intent goHome = new Intent(this, MainActivity.class);
+        goHome.putExtra("mapReturn", (HashMap<String, PhoneBill>) getIntent().getExtras().get("map"));
+        setResult(RESULT_OK, goHome);
+        finish();
     }
 }
