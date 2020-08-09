@@ -55,6 +55,30 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
     this.endDate = endDate;
   }
 
+  public String retStartTime(){
+    return this.startTime;
+  }
+
+  public String retStartDate(){
+    return this.startDate;
+  }
+
+  public String retStartAMPM(){
+    return this.startAM_PM;
+  }
+
+  public String retEndTime(){
+    return this.endTime;
+  }
+
+  public String retEndDate(){
+    return this.endDate;
+  }
+
+  public String retEndAMPM(){
+    return this.endAM_PM;
+  }
+
   /**
    * Returns the callerNumber associated with the phonecall
    * @return
