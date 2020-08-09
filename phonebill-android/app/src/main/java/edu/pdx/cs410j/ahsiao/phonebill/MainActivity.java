@@ -146,11 +146,12 @@ public class MainActivity extends AppCompatActivity {
             String currentBillName = "";
             PhoneBill temp = null;
             String splitLine;
-            String[] args = null;
+            String[] args;
 
             phoneBillHashMap.clear();
             BufferedReader br = new BufferedReader(new FileReader(filePath));
             String line = br.readLine();
+
             while(line != null){
                 if(!line.startsWith("\t")){
                     currentBillName = line;
@@ -159,8 +160,8 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     splitLine = line.split("\t")[1];
                     args = splitLine.split(" ");
-                    temp.addPhoneCall(new PhoneCall(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]));
-                    Log.d("PHONECALLFROMLOAD", args[0]+" "+args[1]+" "+args[2]+" "+args[3]+" "+args[4]+" "+args[5]+" "+args[6]+" "+args[7]);
+                    temp.addPhoneCall(new PhoneCall(args[3], args[5], args[7], args[8], args[9], args[11], args[12], args[13]));
+                    Log.d("PHONECALLFROMLOAD", args[3] + " " + args[5] + " " + args[7] + " " + args[8] + " " + args[9] + " " + args[11] + " " + args[12] + " " + args[13]);
                 }
                 phoneBillHashMap.put(currentBillName, temp);
                 line = br.readLine();
@@ -177,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * writeToFile writes the contents of the current phoneBillHashMap to a file ("phoneBillData.txt") in internal storage
+     *
      */
     private void writeToFile(){
         String filePath = this.getFilesDir() + "/" + "phoneBillData.txt";
@@ -190,8 +192,8 @@ public class MainActivity extends AppCompatActivity {
                 fw.flush();
                 for(Object call : phoneBillHashMap.get(name).getPhoneCalls()){
                     PhoneCall phonecall = (PhoneCall) call;
-                    fw.append("\t" + phonecall.getCaller() + " " + phonecall.getCallee() + " " + phonecall.getStartTime() + " " + phonecall.getEndTime() + "\n");
-                    Log.d("CALL DATA", "\t" + phonecall.getCaller() + " " + phonecall.getCallee() + " " + phonecall.retStartDate() + " " + phonecall.retStartTime() + " " +  phonecall.retStartAMPM() + " " + phonecall.retEndDate() + " " + phonecall.retEndTime() + " " +  phonecall.retEndAMPM() + "\n");
+                    fw.append("\t" + phonecall.toString() + "\n");
+                    Log.d("CALL DATA", "\t" + phonecall.toString() + "\n");
                     fw.flush();
                 }
             }
